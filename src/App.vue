@@ -9,10 +9,6 @@
 export default {
   name: "app",
   beforeCreate: function() {
-    let authenticated = this.$cookie.get('shots-r-us-auth');
-    if (!authenticated) {
-      this.$router.push("account");
-    }
   }
 };
 </script>
