@@ -9,6 +9,9 @@
       <router-link to="/find">
         <button v-bind:class="{ selected: $route.name  == 'find'}" class="button">Districs</button>
       </router-link>
+      <router-link to="/people">
+        <button v-bind:class="{ selected: $route.name  == 'people'}" class="button">People</button>
+      </router-link>
       <router-link to="/account">
         <button v-bind:class="{ selected: $route.name  == 'account'}" class="button">Account</button>
       </router-link>

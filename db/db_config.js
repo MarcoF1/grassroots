@@ -3,86 +3,87 @@ const sqlite3 = require('sqlite3');
 let sqlDb;
 
 const columnNames = {
-  userID: "user_id",
+  user_id: "user_id",
   password: "password",
-  userName: "username",
-  vaccine: "vaccine",
-  location: "location",
-  rating: "rating",
-  waitTime: "wait_time",
-  date: "date"
+  username: "username",
+  is_rep: "is_rep",
+
+  is_item: "is_item",
+  text: "text",
+  tags: "tags",
+  deadline: "deadline",
+  
+  disctict_id: "disctict_id",
+  address: "address",
+
+  post_id: "post_id",
+  timestamp: "timestamp"
+
 };
 Object.freeze(columnNames);
 
 function createDb() {
   console.log("created our db!");
-  sqlDb = new sqlite3.Database('bowlers170.db', function() {
+  sqlDb = new sqlite3.Database('katalog.db', function() {
+    
+    createDistrictTable();
     createUserTable();
-    createVaccinesTable();
-    createLocationsTable();
-    createVaccineLocationsTable();
-    createRatingsTable();
-    createWaitTimesTable();
-    createVaccineHistoryTable();
+    createPostsTable();
+    createLikesTable()
+
   });
+};
+
+
+function createDistrictTable() {
+  sqlDb.run(`CREATE TABLE IF NOT EXISTS districts (
+    ${columnNames.disctict_id} INTEGER PRIMARY KEY,
+    ${columnNames.address} TEXT NOT NULL
+  )`);
 };
 
 function createUserTable() {
   sqlDb.run(`CREATE TABLE IF NOT EXISTS users (
-    ${columnNames.userID} INTEGER PRIMARY KEY AUTOINCREMENT,
-    ${columnNames.userName} TEXT NOT NULL UNIQUE,
-    ${columnNames.password} TEXT NOT NULL
+    ${columnNames.user_id} INTEGER PRIMARY KEY AUTOINCREMENT,
+    ${columnNames.username} TEXT NOT NULL UNIQUE,
+    ${columnNames.password} TEXT NOT NULL,
+    ${columnNames.disctict_id} INTEGER,
+    ${columnNames.is_rep} BOOLEAN,
+    FOREIGN KEY (${columnNames.disctict_id}) REFERENCES districs(${columnNames.disctict_id})
   )`);
 };
 
-function createVaccinesTable() {
-  sqlDb.run(`CREATE TABLE IF NOT EXISTS vaccines (
-    ${columnNames.vaccine} TEXT PRIMARY KEY UNIQUE
+
+function createPostsTable() {
+  sqlDb.run(`CREATE TABLE IF NOT EXISTS posts (
+    ${columnNames.post_id} INTEGER PRIMARY KEY AUTOINCREMENT,
+    ${columnNames.is_item} BOOLEAN,
+    ${columnNames.user_id} INTEGER NOT NULL,
+    ${columnNames.disctict_id} INTEGER,
+    ${columnNames.tags} TEXT NOT NULL,
+    ${columnNames.text} TEXT NOT NULL,
+    ${columnNames.timestamp} TIMESTAMP NOT NULL,
+    FOREIGN KEY (${columnNames.disctict_id}) REFERENCES districs(${columnNames.disctict_id})
   )`);
 };
 
-function createLocationsTable() {
-  sqlDb.run(`CREATE TABLE IF NOT EXISTS locations (
-    ${columnNames.location} TEXT PRIMARY KEY UNIQUE
+function createLikesTable() {
+  sqlDb.run(`CREATE TABLE IF NOT EXISTS noteLikes (
+    ${columnNames.user_id} INTEGER KEY,
+    ${columnNames.post_id} INTEGER KEY,
+    FOREIGN KEY (${columnNames.user_id}) REFERENCES users(${columnNames.user_id})
+    FOREIGN KEY (${columnNames.post_id}) REFERENCES posts(${columnNames.post_id})
   )`);
 };
 
-function createVaccineLocationsTable() {
-  sqlDb.run(`CREATE TABLE IF NOT EXISTS vaccineLocations (
-    ${columnNames.location} TEXT NOT NULL,
-    ${columnNames.vaccine} TEXT NOT NULL,
-    FOREIGN KEY (${columnNames.location}) REFERENCES locations(${columnNames.location}),
-    FOREIGN KEY (${columnNames.vaccine}) REFERENCES vaccines(${columnNames.vaccine})
+function createLikesTable() {
+  sqlDb.run(`CREATE TABLE IF NOT EXISTS noteLikes (
+    ${columnNames.user_id} INTEGER KEY,
+    ${columnNames.post_id} INTEGER KEY,
+    FOREIGN KEY (${columnNames.user_id}) REFERENCES users(${columnNames.user_id})
+    FOREIGN KEY (${columnNames.post_id}) REFERENCES posts(${columnNames.post_id})
   )`);
 };
-
-function createRatingsTable() {
-  sqlDb.run(`CREATE TABLE IF NOT EXISTS ratings (
-    ${columnNames.location} TEXT NOT NULL,
-    ${columnNames.rating} INTEGER,
-    FOREIGN KEY (${columnNames.location}) REFERENCES locations(${columnNames.location})
-  )`);
-};
-
-function createWaitTimesTable() {
-  sqlDb.run(`CREATE TABLE IF NOT EXISTS waitTimes (
-    ${columnNames.location} TEXT NOT NULL,
-    ${columnNames.waitTime} INTEGER NOT NULL,
-    FOREIGN KEY (${columnNames.location}) REFERENCES locations(${columnNames.location})
-  )`);
-};
-
-function createVaccineHistoryTable() {
-  sqlDb.run(`CREATE TABLE IF NOT EXISTS vaccineHistory (
-    ${columnNames.userID} INTEGER NOT NULL,
-    ${columnNames.location} TEXT,
-    ${columnNames.vaccine} TEXT NOT NULL,
-    ${columnNames.date} TEXT NOT NULL,
-    FOREIGN KEY (${columnNames.location}) REFERENCES locations(${columnNames.location}),
-    FOREIGN KEY (${columnNames.userID}) REFERENCES users(${columnNames.userID})
-  )`);
-};
-
 
 // Helper wrapper functions that return promises that resolve when sql queries are complete.
 

@@ -35,6 +35,7 @@ router.post(
     
     // authenticate and sign the user in
     req.session.username = user.username;
+    req.session.user_id = user.user_id;
     res.status(201).json({data: user, message: "You are signed in."}).end();
 
   } catch (error) {
@@ -54,6 +55,7 @@ router.delete(
   try {
     // sign out user
     req.session.username = undefined;
+    req.session.user_id = undefined;
     res.status(200).json({ message: "Successfuly signed out user!" }).end();
 
   } catch (error) {

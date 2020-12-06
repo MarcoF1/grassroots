@@ -8,8 +8,9 @@ const cors = require('cors');
 // import all the express routes we will be using
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const postsRouter = require('./routes/posts');
+const districtRouter = require('./routes/districts');
 const sessionRouter = require('./routes/session');
-const pharmaciesRouter = require('./routes/pharmacies');
 
 // create our app
 const app = express();
@@ -42,8 +43,9 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 // connect url hierarchies to our routers
 app.use('/', indexRouter);
-app.use('/api/pharmacies', pharmaciesRouter);
+app.use('/api/posts', postsRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/districts', districtRouter);
 app.use('/api/users/session', sessionRouter);
 
 app.use('*', function (req, res) {

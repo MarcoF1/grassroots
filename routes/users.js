@@ -25,6 +25,23 @@ router.get(
 });
 
 /**
+ * Get users
+ * 
+ * @name GET /api/users
+ */
+router.get(
+  '/:id', 
+  [],
+  async (req, res) => {
+  try {
+    let user = await Users.findOne(req.params.id);
+    res.status(200).json(user).end();
+  } catch (error) {
+    res.status(503).json({ error: "Could not fetch users" }).end();
+  }
+});
+
+/**
  * Create new user.
  * 
  * @name POST /api/users
@@ -39,11 +56,10 @@ router.post(
   try {
     const username = req.body.username;
     const password = req.body.password;
-    // issue a call to the DB to create a new user with the given username
     let user = await Users.addOne(username, password);
     res.status(201).json({ user, message: "Please sign in to continue." }).end();
-    
   } catch (error) {
+
     res.status(400).json({ error: "Username must be unique and non-empty" }).end();
   }
 });

@@ -3,8 +3,11 @@ const db = require('../db/db_config');
 /**
  * @typeof User
  * 
- * @prop {string} name - name of the user
- * @prop {number} id - id of the user
+ * @prop {number} user_id 
+ * @prop {string} username 
+ * @prop {string} password 
+ * @prop {number} district_id - users district
+ * @prop {bool} is_rep - if they are rep for their district
  */
 
 /**
@@ -18,24 +21,33 @@ class Users {
   /**
    * Add a User.
    * 
-   * @param {string} name - User name
+   * @param {string} username - User name
    * @param {string} password - User password
    * @return {User} - created user
    */
-  static async addOne(name, password) {
+  static async addOne(username, password) {
     // first insert the user into the db then fetch the user from the DB
-    return db.run(`INSERT INTO users (${db.columnNames.userName},
-                                     ${db.columnNames.password}) VALUES ('${name}', '${password}')`)
-              .then(() => Users.findOne(name));
+    return db.run(`INSERT INTO users (${db.columnNames.username},
+                                     ${db.columnNames.password}) VALUES ('${username}', '${password}')`)
+              .then(() => Users.findOne(username));
   }
 
   /**
    * Find a User by Name.
-   * @param {string} name - name of User to find
+   * @param {string} username - name of User to find
    * @return {User | undefined} - found User
    */
-  static async findOne(name) {
-    return db.get(`SELECT * FROM users WHERE ${db.columnNames.userName} = '${name}'`);
+  static async findOne(username) {
+    return db.get(`SELECT * FROM users WHERE ${db.columnNames.username} = '${username}'`);
+  }
+
+  /**
+   * Find a User by id.
+   * @param {string} id 
+   * @return {User | undefined} - found User
+   */
+  static async findOne(id) {
+    return db.get(`SELECT * FROM users WHERE ${db.columnNames.user_id} = '${id}'`);
   }
 
   /**

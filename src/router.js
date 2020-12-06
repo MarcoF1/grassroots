@@ -41,6 +41,15 @@ export default new Router({
       name: 'feed',
       component: () => import('./views/Feed.vue') 
     },
-
+    { 
+      path: '/people', 
+      name: 'people',
+      component: () => import('./views/People.vue') 
+    },
+    { 
+      path: '/user/:id', 
+      name: 'user',
+      component: () => import('./components/User.vue') 
+    }
   ]
 })
