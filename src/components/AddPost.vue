@@ -96,7 +96,6 @@ export default {
             // handle success
             eventBus.$emit('post-success', res.data.post);
             this.messages.push(res.data.message);
-            this.messages.push(res.data.post);
           })
           .catch(err => {
             // handle error 
@@ -115,8 +114,9 @@ export default {
       }, 5000);
     },
     resetForm: function() {
-      this.text = ""
+      this.post = ""
       this.tag = ""
+      this.tags = []
     },
   },
 };

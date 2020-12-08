@@ -53,14 +53,15 @@ export default {
   data() {
     return {
       zoom: 14,
-      center: L.latLng(42.3526, -71.1097),
+      center: L.latLng(40.7128, -74.0060),
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       currentZoom: 14,
-      currentCenter: L.latLng(42.3736, -71.1097),
+      currentCenter: L.latLng(40.7128, -74.0060),
       searched: "",
       vaccineLocations: [
         {id: 1, name: "place 1", coordinate: L.latLng(42.337441, -71.104794)},
-        {id: 2, name: "place 2", coordinate: L.latLng(42.338365, -71.108303)}
+        {id: 2, name: "place 2", coordinate: L.latLng(42.338365, -71.108303)},
+        {id: 3, name: "place 3", coordinate: L.latLng(42.339365, -71.108303)}
       ]
     };
   },
@@ -87,7 +88,7 @@ export default {
       this.vaccineLocations = this.formatVaccineLocations(locations);
     },
     getPharmacies() {
-      const body = { };
+      const body = {};
         axios
           .get("/api/pharmacies", body)
           .then((res) => {

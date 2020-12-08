@@ -34,8 +34,6 @@ router.post(
             post["timestamp"] = Date.now();
             res.status(201).json({post: post, message: "Succesfully added post!" }).end();
         }
-      
-      
     } catch (error) {
         res.status(400).json({ error: "Failed to add post" }).end();
     }
@@ -89,6 +87,12 @@ router.get(
     async (req, res) => {
     try {
         let posts = await Posts.findAll();
+        posts = posts.filter(
+            post => {
+                let tags = post.tags.toLowerCase().split(',')
+                return tags.includes(req.params.topic.toLowerCase());
+            }
+        )
         res.status(201).json({posts}).end();
     } catch (error) {
         res.status(400).json({ error: "Failed to get posts" }).end();
