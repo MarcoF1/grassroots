@@ -10,4 +10,5 @@ local communities to increase voter participation
 
 
 Let us know about your relationship with politics to improve our product!
-[Form!](https://forms.gle/r1bcfqU9ZH3a28sv9)
+
+[Form](https://forms.gle/r1bcfqU9ZH3a28sv9)
