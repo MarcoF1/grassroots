@@ -3,7 +3,10 @@
       <router-link to="/">
         <button v-bind:class="{ selected: $route.name  == 'main'}" class="button">Home</button>
       </router-link>
-      <router-link to="/feed">
+      <router-link to="/team">
+        <button v-bind:class="{ selected: $route.name  == 'team'}" class="button">Team</button>
+      </router-link>
+      <!-- <router-link to="/feed">
         <button v-bind:class="{ selected: $route.name  == 'feed'}" class="button">Feed</button>
       </router-link>
       <router-link to="/find">
@@ -14,16 +17,10 @@
       </router-link>
       <router-link to="/account">
         <button v-bind:class="{ selected: $route.name  == 'account'}" class="button">Account</button>
-      </router-link>
+      </router-link> -->
   </div>
 </template>
-<style scoped>
-  .selected {
-    background: rgb(255, 255, 255);
-    color: rgb(0, 0, 0);
-    border: 2px black solid
-  }
-</style>
+
 
 <script>
 export default {
@@ -37,6 +34,17 @@ export default {
 <style scoped>
   .button {
     margin: 8px;
+  }
+  .selected {
+    background: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    border: 2px black solid
+  }
+  .nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* justify-content: flex-end; */
   }
 
 </style>
