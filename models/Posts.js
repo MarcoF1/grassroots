@@ -27,10 +27,11 @@ class Posts {
    * @param {boolean} is_item 
    * @return {Post | undefined} - Post
    */
-  static async addOne(user_id, text, tags, is_item) {
+  static async addOne(user_id, username, text, tags, is_item) {
     return db.run(`INSERT INTO posts 
       (
         ${db.columnNames.user_id},
+        ${db.columnNames.username},
         ${db.columnNames.text},
         ${db.columnNames.tags},
         ${db.columnNames.is_item},
@@ -39,6 +40,7 @@ class Posts {
       VALUES 
       (
         '${user_id}',
+        '${username}',
         '${text}',
         '${tags}',
         '${is_item}',

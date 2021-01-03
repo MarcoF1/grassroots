@@ -1,9 +1,14 @@
 <template>
   <div class="wrapper">
-    <p>user {{post.user_id}}</p>
-    <p><strong>{{post.text}}</strong></p>
-    <p v-if="post.tags.length > 0">Tags: <i>{{post.tags}}</i></p>
-    <p>{{time}}</p>
+    <p><strong>{{post.username}}</strong> · {{time}}</p>
+    <p>"{{post.text}}"</p>
+    <div v-if="post.tags.length > 0" class="tags">
+      <div class="tags">
+        <div v-for="tag in post.tags.split(',')" v-bind:key="tag" class="tag">
+          {{tag}}
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -13,10 +18,26 @@
     border-radius: 32px;
     box-shadow: 0px 0px 12px 6px #ddd;
     margin-bottom: 16px;
+    width: 600px;
   }
   .button {
     margin-left: 32px;
   }
+  .tags {
+    display: flex;
+  }
+  .tag {
+    background: rgb(252, 167, 255);
+    margin-right: 8px;
+    padding: 8px;
+    border-radius: 16px;
+  }
+  @media only screen and (max-width: 800px) {
+    .wrapper {
+      width: 100%;
+    }
+  }
+
 </style>
 
 <script>

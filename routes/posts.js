@@ -18,17 +18,18 @@ router.post(
     ],
     async (req, res) => {
     try {
-    //   const user_id = res.session.user_id;
         const user_id = req.session.user_id;
+        const username = req.session.username;
         const text = req.body.text;
         const tags = req.body.tags;
         const is_item = false;
-        let added = await Posts.addOne(user_id, text, tags, is_item);
+        let added = await Posts.addOne(user_id, username, text, tags, is_item);
 
         if (added) {
             let post = {}
             post["user_id"] = user_id;
             post["text"] = text;
+            post["username"] = username;
             post["tags"] = tags;
             post["is_item"] = is_item;
             post["timestamp"] = Date.now();
@@ -82,15 +83,14 @@ router.get(
  * @name GET /api/posts
  */
 router.get(
-    '/districts/:topic',
+    '/topic/:topic',
     [],
     async (req, res) => {
     try {
         let posts = await Posts.findAll();
         posts = posts.filter(
             post => {
-                let tags = post.tags.toLowerCase().split(',')
-                return tags.includes(req.params.topic.toLowerCase());
+               return post.tags.toLowerCase().includes(req.params.topic.toLowerCase());
             }
         )
         res.status(201).json({posts}).end();

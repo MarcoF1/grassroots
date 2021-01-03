@@ -4,12 +4,12 @@
     <div class="wrap">
       <div class="top">
         <div>
-        <LocationMap :coordinate="[42.3526, -71.1097]"/>
+        <!-- <LocationMap :coordinate="[42.3526, -71.1097]"/> -->
         <h1>{{district.name}}</h1>
-        <h2>Alexandria Ocasio-Cortez</h2>
         <button class="button" v-on:click="tagChanged">Follow</button>
-        <p>New York's 14th congressional district is a congressional district for the United States House of Representatives located in New York City, represented by Democrat Alexandria Ocasio-Cortez.
-          The district includes the eastern part of The Bronx and part of north-central Queens. The Queens portion includes the neighborhoods of Astoria, College Point, Corona, East Elmhurst, Elmhurst, Jackson Heights, and Woodside. The Bronx portion of the district includes the neighborhoods of City Island, Country Club, Van Nest, Morris Park, Parkchester, Pelham Bay, Schuylerville, and Throggs Neck. Roughly half of the population of the district is of Hispanic or Latino heritage, making it one of the more Latino districts in New York. Before redistricting for the 2012 election, much of the area was in New York's 7th congressional district.</p>
+        <h2>Represenatives:</h2>
+        <h2>Description:</h2>
+        
         <div v-if='messages.length' class="success-message" style="text-align:center;">
           <div v-for='message in messages' v-bind:key='message.id'>{{ message }}</div>
         </div>
@@ -19,52 +19,55 @@
           </ul>
         </div>
         </div>
-        <div>
-          <img class="headshot" :src="'https://images-na.ssl-images-amazon.com/images/I/81XQCj3W5kL._AC_SL1500_.jpg'">
-        </div>
       </div>
 
-      <h1>Overview</h1>
-      <Tabs :mode="mode">
-        <tab title="Updates">Updates will go here!</tab>
-        <tab title="Posts">
-          <div>
-            <vue-tags-input
-              v-model="tag"
-              :tags="tags"
-              :autocomplete-items="filteredItems"
-              @tags-changed="tagChanged"
-              class = "add-tags"
-            />
-            <div v-if="displayPosts.length==0">
-              <Post  v-for="post in posts.slice().reverse()" :post="post" v-bind:key="post"/>
+      <div class="overview">
+        <Tabs :mode="mode">
+          <tab title="Updates">Updates will go here!</tab>
+          <tab title="Posts">
+            <div>
+              <div v-if="posts.length==0">
+                No posts with tag: {{district.name}}
+              </div>
+              <div v-else>
+                <Post  v-for="post in posts.slice().reverse()" :post="post" v-bind:key="post"/>
+              </div>
             </div>
-            <div v-else>
-              <Post  v-for="post in displayPosts.slice().reverse()" :post="post" v-bind:key="post"/>
-            </div>
-          </div>
-        </tab>
-        <tab title="Schedule">Schedule will go here!</tab>
-      </Tabs>
+          </tab>
+          <tab title="Schedule">Schedule will go here!</tab>
+        </Tabs>
+      </div>
+      
       
     </div>
   </div>
 </template>
 <style scoped>
   .wrap {
-    padding: 32px
+    padding: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
   }
   .top {
     display: flex;
     justify-content: space-between;
     padding-right: 32px;
     padding-top: 32px;
+    width: 50%;
   }
-  .headshot {
-    height: 300px;
+  .overview {
+    width: 50%;
   }
-  .add-tags {
-    margin-bottom: 32px;
+
+  @media only screen and (max-width: 800px) {
+    .overview {
+      width: 100%;
+    }
+    .top {
+      width: 100%;
+    }
   }
 </style>
 
@@ -91,20 +94,7 @@ export default {
       tag: '',
       tags: [],
       mode: 'light',
-      autocompleteItems: [{
-        text: 'Disctict 1',
-      }, {
-        text: 'Disctict 2',
-      }, {
-        text: 'Health',
-      }, {
-        text: 'Economy',
-      }, {
-        text: 'Transportation',
-      }, {
-        text: 'Education',
-      }
-      ],
+      autocompleteItems: [],
     }
   },
   components: {
@@ -151,6 +141,7 @@ export default {
     clearMessages: function() {
       setInterval(() => {
         this.errors = [];
+        this.messages = [];
       }, 5000);
     },
     getDistrict: function() {
@@ -169,7 +160,7 @@ export default {
     },
     getPosts: function() {
       axios
-        .get(`/api/posts/districts/${this.district.name.toLowerCase()}` )
+        .get(`/api/posts/topic/${this.district.name.toLowerCase()}` )
         .then((res) => {
           this.posts = res.data.posts;
         })

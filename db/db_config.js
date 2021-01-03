@@ -56,6 +56,7 @@ function createPostsTable() {
     ${columnNames.post_id} INTEGER PRIMARY KEY AUTOINCREMENT,
     ${columnNames.is_item} BOOLEAN,
     ${columnNames.user_id} INTEGER NOT NULL,
+    ${columnNames.username} INTEGER NOT NULL,
     ${columnNames.disctict_id} INTEGER,
     ${columnNames.tags} TEXT NOT NULL,
     ${columnNames.text} TEXT NOT NULL,
