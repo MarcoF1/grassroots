@@ -34,7 +34,7 @@ router.get(
   [],
   async (req, res) => {
   try {
-    let user = await Users.findOne(req.params.id);
+    let user = await Users.findByID(req.params.id);
     res.status(200).json(user).end();
   } catch (error) {
     res.status(503).json({ error: "Could not fetch users" }).end();
@@ -59,7 +59,7 @@ router.post(
     let user = await Users.addOne(username, password);
     res.status(201).json({ user, message: "Please sign in to continue." }).end();
   } catch (error) {
-
+    console.log(error)
     res.status(400).json({ error: "Username must be unique and non-empty" }).end();
   }
 });
@@ -85,7 +85,7 @@ router.put(
       return;
     }
 
-    let existingUser = await Users.findOne(username);
+    let existingUser = await Users.findByUsername(username);
     if (existingUser) {
       res.status(400).json({ error: `There is already a user with the username (${username})`}).end();
     }

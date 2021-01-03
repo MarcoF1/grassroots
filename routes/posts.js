@@ -19,7 +19,7 @@ router.post(
     async (req, res) => {
     try {
     //   const user_id = res.session.user_id;
-        const user_id = 1;
+        const user_id = req.session.user_id;
         const text = req.body.text;
         const tags = req.body.tags;
         const is_item = false;

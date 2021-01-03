@@ -24,7 +24,7 @@ Object.freeze(columnNames);
 
 function createDb() {
   console.log("created our db!");
-  sqlDb = new sqlite3.Database('katalog.db', function() {
+  sqlDb = new sqlite3.Database('db.db', function() {
     
     createDistrictTable();
     createUserTable();
@@ -46,10 +46,7 @@ function createUserTable() {
   sqlDb.run(`CREATE TABLE IF NOT EXISTS users (
     ${columnNames.user_id} INTEGER PRIMARY KEY AUTOINCREMENT,
     ${columnNames.username} TEXT NOT NULL UNIQUE,
-    ${columnNames.password} TEXT NOT NULL,
-    ${columnNames.disctict_id} INTEGER,
-    ${columnNames.is_rep} BOOLEAN,
-    FOREIGN KEY (${columnNames.disctict_id}) REFERENCES districs(${columnNames.disctict_id})
+    ${columnNames.password} TEXT NOT NULL
   )`);
 };
 

@@ -89,7 +89,7 @@ export default {
   },
   methods: {
     addPost: function() {
-      const bodyContent = { text: this.post, tags: this.tags.map(tag => tag.text).join()};
+      const bodyContent = { text: this.post, tags: this.tags.map(tag => tag.text).join(), username: this.$cookie.get('auth')};
         axios
           .post(`/api/posts`, bodyContent)
           .then((res) => {
