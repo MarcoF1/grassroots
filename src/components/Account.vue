@@ -9,7 +9,6 @@
     <div v-else class="form-container">
       <SignUp/>
     </div>
-    
   </div>
 </template>
 
@@ -23,16 +22,16 @@ export default {
 
   components: {
     UserSettings,
-    SignUp
+    SignUp,
   },
 
   data() {
     return {
       isSignedIn: false,
       messages: [],
+      errors: [],
     };
   },
-
   created: function() {
     let authenticated = this.$cookie.get('auth');
     if (authenticated) {
@@ -88,8 +87,6 @@ export default {
       this.messages.push("You have saved a new payment!");
       this.clearMessages();
     });
-
-
   },
   methods: {
     clearMessages: function() {

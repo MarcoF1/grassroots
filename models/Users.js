@@ -86,7 +86,35 @@ class Users {
           return Users.findByUsername(username);
         });
   }
-  
+
+
+  /**
+   * Like post
+   * @param {string} username 
+   * @return {User | undefined} - updated User
+   */
+  static async likePost(username, post_id) {
+    return Users.findByUsername(username)
+          .then( user => {
+            db.run(`INSERT INTO likes 
+              (${db.columnNames.note_id},${db.columnNames.post_id}) 
+              VALUES ('${user.user_id}','${post_id}')`)
+          })
+  }
+
+  /**
+   * Disike post
+   * @param {string} username 
+   * @return {User | undefined} - updated User
+   */
+  static async dislikePost(username, post_id) {
+    return Users.findByUsername(username)
+          .then( user => {
+            db.run(`INSERT INTO dislikes 
+              (${db.columnNames.note_id},${db.columnNames.post_id}) 
+              VALUES ('${user.user_id}','${post_id}')`)
+          })
+  }
 }
 
 

@@ -52,7 +52,6 @@ router.get(
     async (req, res) => {
     try {
         let posts = await Posts.findAll();
-        console.log(posts)
         res.status(201).json({posts}).end();
     } catch (error) {
         res.status(400).json({ error: "Failed to get posts" }).end();
@@ -61,16 +60,33 @@ router.get(
 
 
 /**
- * Get all posts by user
+ * Get all posts by user_id
  * 
- * @name GET /api/posts
+ * @name GET /api/posts/user_id/:id
  */
 router.get(
-    '/user/:id',
+    '/user_id/:id',
     [],
     async (req, res) => {
     try {
-        let posts = await Posts.findByUser(req.params.id);
+        let posts = await Posts.findByID(req.params.id);
+        res.status(201).json({posts}).end();
+    } catch (error) {
+        res.status(400).json({ error: "Failed to get posts" }).end();
+    }
+});
+
+/**
+ * Get all posts by username
+ * 
+ * @name GET /api/posts/username/:username
+ */
+router.get(
+    '/username/:username',
+    [],
+    async (req, res) => {
+    try {
+        let posts = await Posts.findByUser(req.params.username);
         res.status(201).json({posts}).end();
     } catch (error) {
         res.status(400).json({ error: "Failed to get posts" }).end();
@@ -80,7 +96,7 @@ router.get(
 /**
  * Get all posts by topic
  * 
- * @name GET /api/posts
+ * @name GET /api/posts/topic/:topic
  */
 router.get(
     '/topic/:topic',
@@ -98,6 +114,8 @@ router.get(
         res.status(400).json({ error: "Failed to get posts" }).end();
     }
 });
+
+
 
 
 module.exports = router;

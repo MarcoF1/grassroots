@@ -66,7 +66,7 @@ function createPostsTable() {
 };
 
 function createLikesTable() {
-  sqlDb.run(`CREATE TABLE IF NOT EXISTS noteLikes (
+  sqlDb.run(`CREATE TABLE IF NOT EXISTS likes (
     ${columnNames.user_id} INTEGER KEY,
     ${columnNames.post_id} INTEGER KEY,
     FOREIGN KEY (${columnNames.user_id}) REFERENCES users(${columnNames.user_id})
@@ -74,8 +74,8 @@ function createLikesTable() {
   )`);
 };
 
-function createLikesTable() {
-  sqlDb.run(`CREATE TABLE IF NOT EXISTS noteLikes (
+function createDislikesTable() {
+  sqlDb.run(`CREATE TABLE IF NOT EXISTS dislikes (
     ${columnNames.user_id} INTEGER KEY,
     ${columnNames.post_id} INTEGER KEY,
     FOREIGN KEY (${columnNames.user_id}) REFERENCES users(${columnNames.user_id})

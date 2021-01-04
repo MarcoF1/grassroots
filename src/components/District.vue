@@ -37,8 +37,6 @@
           <tab title="Schedule">Schedule will go here!</tab>
         </Tabs>
       </div>
-      
-      
     </div>
   </div>
 </template>
