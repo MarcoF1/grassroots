@@ -3,21 +3,15 @@
       <router-link to="/">
         <button v-bind:class="{ selected: $route.name  == 'main'}" class="button">Home</button>
       </router-link>
-      <router-link to="/team">
-        <button v-bind:class="{ selected: $route.name  == 'team'}" class="button">Team</button>
-      </router-link>
-      <!-- <router-link to="/feed">
+      <router-link to="/feed">
         <button v-bind:class="{ selected: $route.name  == 'feed'}" class="button">Feed</button>
       </router-link>
       <router-link to="/find">
         <button v-bind:class="{ selected: $route.name  == 'find'}" class="button">Districs</button>
       </router-link>
-      <router-link to="/people">
-        <button v-bind:class="{ selected: $route.name  == 'people'}" class="button">People</button>
-      </router-link>
       <router-link to="/account">
         <button v-bind:class="{ selected: $route.name  == 'account'}" class="button">Account</button>
-      </router-link> -->
+      </router-link>
   </div>
 </template>
 

@@ -24,7 +24,7 @@ Object.freeze(columnNames);
 
 function createDb() {
   console.log("created our db!");
-  sqlDb = new sqlite3.Database('katalog.db', function() {
+  sqlDb = new sqlite3.Database('db.db', function() {
     
     createDistrictTable();
     createUserTable();
@@ -46,10 +46,7 @@ function createUserTable() {
   sqlDb.run(`CREATE TABLE IF NOT EXISTS users (
     ${columnNames.user_id} INTEGER PRIMARY KEY AUTOINCREMENT,
     ${columnNames.username} TEXT NOT NULL UNIQUE,
-    ${columnNames.password} TEXT NOT NULL,
-    ${columnNames.disctict_id} INTEGER,
-    ${columnNames.is_rep} BOOLEAN,
-    FOREIGN KEY (${columnNames.disctict_id}) REFERENCES districs(${columnNames.disctict_id})
+    ${columnNames.password} TEXT NOT NULL
   )`);
 };
 
@@ -59,6 +56,7 @@ function createPostsTable() {
     ${columnNames.post_id} INTEGER PRIMARY KEY AUTOINCREMENT,
     ${columnNames.is_item} BOOLEAN,
     ${columnNames.user_id} INTEGER NOT NULL,
+    ${columnNames.username} INTEGER NOT NULL,
     ${columnNames.disctict_id} INTEGER,
     ${columnNames.tags} TEXT NOT NULL,
     ${columnNames.text} TEXT NOT NULL,
@@ -68,7 +66,7 @@ function createPostsTable() {
 };
 
 function createLikesTable() {
-  sqlDb.run(`CREATE TABLE IF NOT EXISTS noteLikes (
+  sqlDb.run(`CREATE TABLE IF NOT EXISTS likes (
     ${columnNames.user_id} INTEGER KEY,
     ${columnNames.post_id} INTEGER KEY,
     FOREIGN KEY (${columnNames.user_id}) REFERENCES users(${columnNames.user_id})
@@ -76,8 +74,8 @@ function createLikesTable() {
   )`);
 };
 
-function createLikesTable() {
-  sqlDb.run(`CREATE TABLE IF NOT EXISTS noteLikes (
+function createDislikesTable() {
+  sqlDb.run(`CREATE TABLE IF NOT EXISTS dislikes (
     ${columnNames.user_id} INTEGER KEY,
     ${columnNames.post_id} INTEGER KEY,
     FOREIGN KEY (${columnNames.user_id}) REFERENCES users(${columnNames.user_id})

@@ -1,10 +1,21 @@
 <template>
   <div>
     <Navbar/>
-    <AddPost/>
-    <Feed/>
+    <div class="feed">
+      <AddPost/>
+      <Feed/>
+    </div>
   </div>
 </template>
+
+<style scoped>
+  .feed {
+    display: flex;
+    align-items: center;
+    flex-direction: center;
+    flex-direction: column;
+  }
+</style>
 
 <script>
 import Navbar from "../components/Navbar.vue";

@@ -20,7 +20,7 @@ router.post(
   async (req, res) => {
   try {
     // fetch the user from the DB
-    let user = await Users.findOne(req.body.username);
+    let user = await Users.findByUsername(req.body.username);
     
     // must find user in the DB
     if (!user) {

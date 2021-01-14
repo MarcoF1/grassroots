@@ -9,22 +9,39 @@
         <li v-for='error in errors' v-bind:key='error.id'>{{ error }}</li>
       </ul>
     </div>
-    <div class="wrapper">
-      <ul>
-        <li v-for="user in users" v-bind:key="user">
-            <h1>{{user.username}}</h1>
-            <router-link :to="`user/${user.user_id}`">
-              <button v-bind:class="{ selected: $route.name  == 'account'}" class="button">Account</button>
-            </router-link>
-        </li>
-      </ul>
+    <div class="users">
+      <div v-for="user in users" v-bind:key="user" class="user"> 
+        <h1>{{user.username}}</h1>
+        <router-link :to="`user/${user.user_id}`">
+          <button v-bind:class="{ selected: $route.name  == 'account'}" class="button">Account</button>
+        </router-link>
+      </div>
     </div>
+    
   </div>
 </template>
 
 <style scoped>
-  .wrapper {
-    margin: 32px
+  .users {
+    margin: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .user {
+    padding: 32px;
+    border-radius: 32px;
+    box-shadow: 0px 0px 12px 6px #ddd;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    flex-direction: column;
+  }
+  @media only screen and (max-width: 800px) {
+    .user {
+      width: 100%;
+    }
   }
 </style>
 

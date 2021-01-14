@@ -27,10 +27,11 @@ class Posts {
    * @param {boolean} is_item 
    * @return {Post | undefined} - Post
    */
-  static async addOne(user_id, text, tags, is_item) {
+  static async addOne(user_id, username, text, tags, is_item) {
     return db.run(`INSERT INTO posts 
       (
         ${db.columnNames.user_id},
+        ${db.columnNames.username},
         ${db.columnNames.text},
         ${db.columnNames.tags},
         ${db.columnNames.is_item},
@@ -39,6 +40,7 @@ class Posts {
       VALUES 
       (
         '${user_id}',
+        '${username}',
         '${text}',
         '${tags}',
         '${is_item}',
@@ -57,12 +59,21 @@ class Posts {
 
   /**
    * Return an array of all of the posts by the User
+   * @param {string} user_id 
    * @return {Post[]}
    */
-  static async findByUser(user_id) {
+  static async findByID(user_id) {
     return db.all(`SELECT * FROM posts WHERE ${db.columnNames.user_id} = '${user_id}'`);
   }
-  
+
+  /**
+   * Return an array of all of the posts by the User
+   * @param {string} username 
+   * @return {Post[]}
+   */
+  static async findByUser(username) {
+    return db.all(`SELECT * FROM posts WHERE ${db.columnNames.username} = '${username}'`);
+  }  
 }
 
 

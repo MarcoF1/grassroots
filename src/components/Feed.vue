@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="wrapper">
-      <div v-if='errors.length' class="error-message" style="width: 250px;">
+      <div v-if='errors.length' class="error-message">
         <ul>
           <li v-for='error in errors' v-bind:key='error.id'>{{ error }}</li>
         </ul>
@@ -14,9 +14,6 @@
 </template>
 
 <style scoped>
-  .wrapper {
-    margin: 32px
-  }
 </style>
 
 <script>

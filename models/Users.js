@@ -29,7 +29,7 @@ class Users {
     // first insert the user into the db then fetch the user from the DB
     return db.run(`INSERT INTO users (${db.columnNames.username},
                                      ${db.columnNames.password}) VALUES ('${username}', '${password}')`)
-              .then(() => Users.findOne(username));
+              .then(() => Users.findByUsername(username));
   }
 
   /**
@@ -37,7 +37,7 @@ class Users {
    * @param {string} username - name of User to find
    * @return {User | undefined} - found User
    */
-  static async findOne(username) {
+  static async findByUsername(username) {
     return db.get(`SELECT * FROM users WHERE ${db.columnNames.username} = '${username}'`);
   }
 
@@ -46,7 +46,7 @@ class Users {
    * @param {string} id 
    * @return {User | undefined} - found User
    */
-  static async findOne(id) {
+  static async findByID(id) {
     return db.get(`SELECT * FROM users WHERE ${db.columnNames.user_id} = '${id}'`);
   }
 
@@ -69,7 +69,7 @@ class Users {
         SET ${db.columnNames.userName} = '${new_username}' 
         WHERE ${db.columnNames.userName} = '${username}'`)
         .then( () => {
-          return Users.findOne(new_username);
+          return Users.findByUsername(new_username);
         });
   }
   /**
@@ -83,10 +83,38 @@ class Users {
         SET ${db.columnNames.password} = '${password}' 
         WHERE ${db.columnNames.userName} = '${username}'`)
         .then( () => {
-          return Users.findOne(username);
+          return Users.findByUsername(username);
         });
   }
-  
+
+
+  /**
+   * Like post
+   * @param {string} username 
+   * @return {User | undefined} - updated User
+   */
+  static async likePost(username, post_id) {
+    return Users.findByUsername(username)
+          .then( user => {
+            db.run(`INSERT INTO likes 
+              (${db.columnNames.note_id},${db.columnNames.post_id}) 
+              VALUES ('${user.user_id}','${post_id}')`)
+          })
+  }
+
+  /**
+   * Disike post
+   * @param {string} username 
+   * @return {User | undefined} - updated User
+   */
+  static async dislikePost(username, post_id) {
+    return Users.findByUsername(username)
+          .then( user => {
+            db.run(`INSERT INTO dislikes 
+              (${db.columnNames.note_id},${db.columnNames.post_id}) 
+              VALUES ('${user.user_id}','${post_id}')`)
+          })
+  }
 }
 
 

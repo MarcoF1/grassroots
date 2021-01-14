@@ -19,6 +19,10 @@
       Form
       </button> 
     </a>
+    {{'  '}}
+    <router-link to="/team">
+        <button v-bind:class="{ selected: $route.name  == 'team'}" class="button">Team</button>
+    </router-link>
     
 
     </center>

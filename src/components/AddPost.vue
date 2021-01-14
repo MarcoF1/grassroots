@@ -29,11 +29,11 @@
     display: flex;
     align-items: center;
     flex-direction: column;
+    width: 60%;
   }
   .button {
     margin-top: 16px;
   }
-
   input[type=text], select {
     width: 100%;
     padding: 12px 20px;
@@ -43,6 +43,13 @@
     border-radius: 4px;
     box-sizing: border-box;
   }
+
+  @media only screen and (max-width: 800px) {
+    .wrapper {
+      width: 100%;
+    }
+  }
+
 </style>
 
 <script>
@@ -89,7 +96,7 @@ export default {
   },
   methods: {
     addPost: function() {
-      const bodyContent = { text: this.post, tags: this.tags.map(tag => tag.text).join()};
+      const bodyContent = { text: this.post, tags: this.tags.map(tag => tag.text).join(), username: this.$cookie.get('auth')};
         axios
           .post(`/api/posts`, bodyContent)
           .then((res) => {

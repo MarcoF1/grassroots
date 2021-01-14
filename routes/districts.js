@@ -4,23 +4,15 @@ const router = express.Router();
 const districts = [
     {
         id: "1",
-        name: "Bronx"
+        name: "NY 14th District - Bronx"
     },
     {
         id: "2",
-        name: "Brooklyn"
+        name: "UA MIT"
     },
     {
         id: "3",
-        name: "Manhattan"
-    },
-    {
-        id: "4",
-        name: "Queens"
-    },
-    {
-        id: "5",
-        name: "Staten Island"
+        name: "TX 30th District - Dallas"
     }
 ]
 
