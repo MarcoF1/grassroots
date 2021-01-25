@@ -13,8 +13,10 @@ const columnNames = {
   tags: "tags",
   deadline: "deadline",
   
-  disctict_id: "disctict_id",
-  address: "address",
+  government_id: "government_id",
+  name: "name",
+  description: "description",
+  contacts: "contacts",
 
   post_id: "post_id",
   timestamp: "timestamp"
@@ -26,8 +28,12 @@ function createDb() {
   console.log("created our db!");
   sqlDb = new sqlite3.Database('db.db', function() {
     
-    createDistrictTable();
+    createGovernmentsTable();
     createUserTable();
+
+    createUserGovernmentsTable();
+
+
     createPostsTable();
     createLikesTable()
 
@@ -35,10 +41,12 @@ function createDb() {
 };
 
 
-function createDistrictTable() {
-  sqlDb.run(`CREATE TABLE IF NOT EXISTS districts (
-    ${columnNames.disctict_id} INTEGER PRIMARY KEY,
-    ${columnNames.address} TEXT NOT NULL
+function createGovernmentsTable() {
+  sqlDb.run(`CREATE TABLE IF NOT EXISTS governments (
+    ${columnNames.government_id} INTEGER PRIMARY KEY AUTOINCREMENT,
+    ${columnNames.name} TEXT,
+    ${columnNames.description} TEXT,
+    ${columnNames.contacts} TEXT
   )`);
 };
 
@@ -47,6 +55,15 @@ function createUserTable() {
     ${columnNames.user_id} INTEGER PRIMARY KEY AUTOINCREMENT,
     ${columnNames.username} TEXT NOT NULL UNIQUE,
     ${columnNames.password} TEXT NOT NULL
+  )`);
+};
+
+function createUserGovernmentsTable() {
+  sqlDb.run(`CREATE TABLE IF NOT EXISTS user_governments (
+    ${columnNames.user_id} INTEGER KEY,
+    ${columnNames.government_id} INTEGER KEY,
+    FOREIGN KEY (${columnNames.user_id}) REFERENCES users(${columnNames.user_id})
+    FOREIGN KEY (${columnNames.government_id}) REFERENCES governments(${columnNames.government_id})
   )`);
 };
 
@@ -74,14 +91,6 @@ function createLikesTable() {
   )`);
 };
 
-function createDislikesTable() {
-  sqlDb.run(`CREATE TABLE IF NOT EXISTS dislikes (
-    ${columnNames.user_id} INTEGER KEY,
-    ${columnNames.post_id} INTEGER KEY,
-    FOREIGN KEY (${columnNames.user_id}) REFERENCES users(${columnNames.user_id})
-    FOREIGN KEY (${columnNames.post_id}) REFERENCES posts(${columnNames.post_id})
-  )`);
-};
 
 // Helper wrapper functions that return promises that resolve when sql queries are complete.
 

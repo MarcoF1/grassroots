@@ -27,9 +27,9 @@ export default new Router({
       component: () => import('./views/Find.vue')
     },
     { 
-      path: '/district/:id', 
-      name: 'district',
-      component: () => import('./components/District.vue') 
+      path: '/government/:id', 
+      name: 'government',
+      component: () => import('./components/Government.vue') 
     },
     { 
       path: '/rep/:id', 

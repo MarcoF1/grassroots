@@ -10,12 +10,12 @@
         <li v-for='error in errors' v-bind:key='error.id'>{{ error }}</li>
       </ul>
     </div>
-    <div class="districts">
-      <div v-for="district in districts" v-bind:key="district" class="district"> 
-        <p><strong>District {{district.name}}</strong></p>
+    <div class="governments">
+      <div v-for="government in governments" v-bind:key="government" class="government"> 
+        <p><strong>Government {{government.name}}</strong></p>
         <p>Address: </p>
         <p>Mambers: </p>
-        <router-link :to="`district/${district.id}`">
+        <router-link :to="`government/${government.government_id}`">
           <button v-bind:class="{ selected: $route.name  == 'account'}" class="button">View</button>
         </router-link>
       </div>
@@ -24,13 +24,13 @@
   </div>
 </template>
 <style scoped>
-  .districts {
+  .governments {
     margin: 32px;
     display: flex;
     flex-direction: column;
     align-items: center;
   }
-  .district {
+  .government {
     padding: 32px;
     border-radius: 32px;
     box-shadow: 0px 0px 12px 6px #ddd;
@@ -38,7 +38,7 @@
     width: 50%;
   }
   @media only screen and (max-width: 800px) {
-    .district {
+    .government {
       width: 100%;
     }
   }
@@ -60,10 +60,10 @@ export default {
   },
   created: function() {
     axios
-      .get("/api/districts")
+      .get("/api/governments")
       .then((req) => {
         // handle success
-        this.districts = req.data.districts;
+        this.governments = req.data.governments;
       })
       .catch(err => {
         // handle error
@@ -79,7 +79,7 @@ export default {
     return {
       errors: [],
       messages: [],
-      districts: [],
+      governments: [],
     }
   },
 };
