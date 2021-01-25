@@ -23,7 +23,7 @@
               <p>Reps: {{government.reps.length}}</p>
               <p>Members: {{government.users.length}}</p>
               <button v-if="!isMember" class="button" v-on:click="joinGovernment">Join</button> 
-              <button v-else class="button" v-on:click="joinGovernment">Leave</button> 
+              <button v-else class="button" v-on:click="leaveGovernment">Leave</button> 
           </tab>
           <tab title="Representatives">
             <ul>
@@ -89,7 +89,7 @@ export default {
       government: {},
       posts: [],
       displayPosts: [],
-      id: parseInt(this.$route.params.id),
+      government_id: parseInt(this.$route.params.id),
       isRep: false,
       isMember: false,
       messages: [],
@@ -115,18 +115,54 @@ export default {
     },
     getGovernment: function() {
       axios
-        .get(`/api/governments/id/${this.id}` )
+        .get(`/api/governments/id/${this.government_id}` )
         .then((res) => {
           this.government = res.data.government;
-          this.messages.push(this.government)
-          this.isRep = this.government.reps.some( rep => rep.username == this.$cookie.get('auth'))
-          this.isMember = this.government.members.some( member => member.username == this.$cookie.get('auth'))
+          this.isRep = this.government.reps.some( rep => rep.user_id == this.$cookie.get('auth-id'))
+          this.isMember = this.government.users.some( member => member.user_id == this.$cookie.get('auth-id'))
         })
         .catch(err => {
           // handle error 
           this.errors.push(err.response.data.error);
         })
-    }}
+    },
+    joinGovernment: function() {
+      const bodyContent = { government_id: this.government_id};
+      axios
+        .post(`/api/governments/join`, bodyContent)
+        .then(() => {
+          this.messages.push("Joined new government!!")
+          this.isMember = true;
+        })
+        .catch(err => {
+          // handle error 
+          this.errors.push(err.response.data.error);
+        })
+        .then(() => {
+          // always executed
+          this.resetForm();
+          this.clearMessages();
+        });
+    },
+    leaveGovernment: function() {
+      axios
+        .delete(`/api/governments/leave/${this.government_id}`)
+        .then(() => {
+          this.messages.push("Left government")
+          this.isMember = false;
+          this.isRep = false;
+        })
+        .catch(err => {
+          // handle error 
+          this.errors.push(err.response.data.error);
+        })
+        .then(() => {
+          // always executed
+          this.resetForm();
+          this.clearMessages();
+        });
+    },
+    }
 }
 </script>
 

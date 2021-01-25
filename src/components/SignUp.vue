@@ -69,7 +69,7 @@ export default {
           .post("/api/users/session", bodyContent)
           .then((res) => {
             // handle success
-            eventBus.$emit('signin-success', res.data.data.username);
+            eventBus.$emit('signin-success', res.data.user);
           })
           .catch(err => {
             // handle error

@@ -36,7 +36,7 @@ router.post(
     // authenticate and sign the user in
     req.session.username = user.username;
     req.session.user_id = user.user_id;
-    res.status(201).json({data: user, message: "You are signed in."}).end();
+    res.status(201).json({user, message: "You are signed in."}).end();
 
   } catch (error) {
     res.status(503).json({ error: "Could not sign user in" }).end();
