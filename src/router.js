@@ -22,9 +22,9 @@ export default new Router({
       component: () => import('./views/Account.vue')
     },
     {
-      path: '/find',
+      path: '/governments',
       name: 'find',
-      component: () => import('./views/Find.vue')
+      component: () => import('./views/Governments.vue')
     },
     { 
       path: '/government/:id', 

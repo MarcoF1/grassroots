@@ -3,11 +3,8 @@
       <router-link to="/">
         <button v-bind:class="{ selected: $route.name  == 'main'}" class="button">Home</button>
       </router-link>
-      <router-link to="/feed">
-        <button v-bind:class="{ selected: $route.name  == 'feed'}" class="button">Feed</button>
-      </router-link>
-      <router-link to="/find">
-        <button v-bind:class="{ selected: $route.name  == 'find'}" class="button">Districs</button>
+      <router-link to="/governments">
+        <button v-bind:class="{ selected: $route.name  == 'governments'}" class="button">Governments</button>
       </router-link>
       <router-link to="/account">
         <button v-bind:class="{ selected: $route.name  == 'account'}" class="button">Account</button>

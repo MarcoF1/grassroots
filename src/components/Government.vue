@@ -14,16 +14,24 @@
         </div>
         </div>
       </div>
-      
-
+    
       <div class="overview">
         <Tabs :mode="mode">
           <tab title="Home">
-              <h1>Name: {{government.name}}</h1>
-              <h1>Description: {{government.name}}</h1>
+              <h1>{{government.name}}</h1>
+              <p>Description: {{government.name}}</p>
+              <p>Reps: {{government.reps.length}}</p>
+              <p>Members: {{government.users.length}}</p>
+              <button v-if="!isMember" class="button" v-on:click="joinGovernment">Join</button> 
+              <button v-else class="button" v-on:click="joinGovernment">Leave</button> 
           </tab>
           <tab title="Representatives">
-            Representatives will go here!
+            <ul>
+              <li v-for="rep in government.reps" v-bind:key="rep">
+                {{rep}}
+              </li>
+            </ul>
+            
           </tab>
           <tab title="Bills">
             Bills will go here!
@@ -82,6 +90,8 @@ export default {
       posts: [],
       displayPosts: [],
       id: parseInt(this.$route.params.id),
+      isRep: false,
+      isMember: false,
       messages: [],
       errors: [],
     }
@@ -108,14 +118,14 @@ export default {
         .get(`/api/governments/id/${this.id}` )
         .then((res) => {
           this.government = res.data.government;
+          this.messages.push(this.government)
+          this.isRep = this.government.reps.some( rep => rep.username == this.$cookie.get('auth'))
+          this.isMember = this.government.members.some( member => member.username == this.$cookie.get('auth'))
         })
         .catch(err => {
           // handle error 
           this.errors.push(err.response.data.error);
         })
-        .then(() => {
-          this.getPosts()
-        });
     }}
 }
 </script>

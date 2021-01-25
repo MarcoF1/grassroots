@@ -12,9 +12,10 @@
     </div>
     <div class="governments">
       <div v-for="government in governments" v-bind:key="government" class="government"> 
-        <p><strong>Government {{government.name}}</strong></p>
-        <p>Address: </p>
-        <p>Mambers: </p>
+        <p><strong>Name: {{government.name}}</strong></p>
+        <p>{{government.description}}</p>
+        <p>Reps: {{government.reps.length}}</p>
+        <p>Members: {{government.users.length}}</p>
         <router-link :to="`government/${government.government_id}`">
           <button v-bind:class="{ selected: $route.name  == 'account'}" class="button">View</button>
         </router-link>

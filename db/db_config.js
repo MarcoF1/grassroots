@@ -16,7 +16,8 @@ const columnNames = {
   government_id: "government_id",
   name: "name",
   description: "description",
-  contacts: "contacts",
+  contact: "contact",
+  address: "address",
 
   post_id: "post_id",
   timestamp: "timestamp"
@@ -33,10 +34,6 @@ function createDb() {
 
     createUserGovernmentsTable();
 
-
-    createPostsTable();
-    createLikesTable()
-
   });
 };
 
@@ -46,7 +43,8 @@ function createGovernmentsTable() {
     ${columnNames.government_id} INTEGER PRIMARY KEY AUTOINCREMENT,
     ${columnNames.name} TEXT,
     ${columnNames.description} TEXT,
-    ${columnNames.contacts} TEXT
+    ${columnNames.contact} TEXT,
+    ${columnNames.address} TEXT
   )`);
 };
 
@@ -62,32 +60,10 @@ function createUserGovernmentsTable() {
   sqlDb.run(`CREATE TABLE IF NOT EXISTS user_governments (
     ${columnNames.user_id} INTEGER KEY,
     ${columnNames.government_id} INTEGER KEY,
+    ${columnNames.is_rep} BOOLEAN,
+    ${columnNames.description} TEXT,
     FOREIGN KEY (${columnNames.user_id}) REFERENCES users(${columnNames.user_id})
     FOREIGN KEY (${columnNames.government_id}) REFERENCES governments(${columnNames.government_id})
-  )`);
-};
-
-
-function createPostsTable() {
-  sqlDb.run(`CREATE TABLE IF NOT EXISTS posts (
-    ${columnNames.post_id} INTEGER PRIMARY KEY AUTOINCREMENT,
-    ${columnNames.is_item} BOOLEAN,
-    ${columnNames.user_id} INTEGER NOT NULL,
-    ${columnNames.username} INTEGER NOT NULL,
-    ${columnNames.disctict_id} INTEGER,
-    ${columnNames.tags} TEXT NOT NULL,
-    ${columnNames.text} TEXT NOT NULL,
-    ${columnNames.timestamp} TIMESTAMP NOT NULL,
-    FOREIGN KEY (${columnNames.disctict_id}) REFERENCES districs(${columnNames.disctict_id})
-  )`);
-};
-
-function createLikesTable() {
-  sqlDb.run(`CREATE TABLE IF NOT EXISTS likes (
-    ${columnNames.user_id} INTEGER KEY,
-    ${columnNames.post_id} INTEGER KEY,
-    FOREIGN KEY (${columnNames.user_id}) REFERENCES users(${columnNames.user_id})
-    FOREIGN KEY (${columnNames.post_id}) REFERENCES posts(${columnNames.post_id})
   )`);
 };
 

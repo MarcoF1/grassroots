@@ -15,12 +15,6 @@
     <ChangeUsername/>
     <ChangePassword/>
     <h1>
-      Governments
-    </h1>
-    <div v-for="gov in governments" v-bind:key="gov">
-        {{gov}}
-    </div>
-    <h1>
       My Governments
     </h1>
     <div v-for="gov in myGovernments" v-bind:key="gov">
@@ -44,8 +38,12 @@
       Create New Government
     </h1>
     <form id="add-government" class='component' v-on:submit.prevent="addGovernment" method="post">
-      <input id='govName' v-model.trim='govName' type='text' name='govName' placeholder="Name">
-      <input id='govDescription' v-model.trim='govDescription' type='text' name='govDescription' placeholder="Description">
+      <div class="wrapper">
+        <input id='govName' v-model.trim='govName' type='text' name='govName' placeholder="Name">
+        <input id='govDescription' v-model.trim='govDescription' type='text' name='govDescription' placeholder="Description">
+        <input id='govContact' v-model.trim='govContact' type='text' name='govContact' placeholder="Contact Info">
+        <input id='govAddress' v-model.trim='govAddress' type='text' name='govContact' placeholder="Address">
+      </div>
       <input type='submit' value='Add' class="button">
     </form>
   </div>
@@ -89,9 +87,10 @@ export default {
       username: this.$cookie.get('auth'),
       govName: "",
       govDescription: "",
+      govContact: "",
+      govAddress: "",
       govID: null,
       myGovernments: [],
-      governments: [],
       messages: [],
       errors: [],
     }
@@ -104,7 +103,7 @@ export default {
   },
   methods: {
     addGovernment: function() {
-      const bodyContent = { name: this.govName, description: this.govDescription};
+      const bodyContent = { name: this.govName, description: this.govDescription, contact: this.govContact, address: this.govAddress};
       axios
         .post(`/api/governments`, bodyContent)
         .then(() => {
@@ -153,22 +152,6 @@ export default {
           this.clearMessages();
         });
     },
-    getGovernments: function() {
-      axios
-        .get(`/api/governments`)
-        .then((res) => {
-          this.governments = res.data.governments
-        })
-        .catch(err => {
-          // handle error 
-          this.errors.push(err.response.data.error);
-        })
-        .then(() => {
-          // always executed
-          this.resetForm();
-          this.clearMessages();
-        });
-    },
     getMyGovernments: function() {
       axios
         .get(`/api/governments/my`)
@@ -198,7 +181,6 @@ export default {
     eventBus.$on("change-username-success", (userName) => {
       this.username = userName;
     });
-    this.getGovernments()
     this.getMyGovernments()
   }
 }

@@ -17,11 +17,15 @@ router.post(
     try {
         let name = req.body.name;
         let description = req.body.description;
+        let contact = req.body.contact;
+        let address = req.body.address;
+        let user_id = req.session.user_id;
         
-        let added = await Governments.addOne(name, description)
+        let added = await Governments.addOne(name, description, contact, address, user_id)
         
         res.status(201).json({message: "Succesfully added a government!"}).end();
     } catch (error) {
+        console.log(error)
         res.status(400).json({ error: "Failed to add government" }).end();
     }
 });
@@ -39,6 +43,8 @@ router.get(
     try {
         let government_id = req.params.government_id;
         let government = await Governments.findByID(government_id);
+        government.users = await Governments.governmentUsers(government.government_id);
+        government.reps = await government.users.filter( user => user.is_rep == 'true');
         res.status(201).json({government}).end();
     } catch (error) {
         res.status(400).json({ error: "Failed to get government" }).end();
@@ -56,9 +62,14 @@ router.get(
     async (req, res) => {
     try {
         let governments = await Governments.findAll()
-        
+        for(let i = 0 ; i < governments.length ; i ++){
+            let gov = governments[i]
+            gov.users = await Governments.governmentUsers(gov.government_id);
+            gov.reps = await gov.users.filter( user => user.is_rep == 'true');
+        }
         res.status(201).json({governments}).end();
     } catch (error) {
+        console.log(error)
         res.status(400).json({ error: "Failed to get governments" }).end();
     }
 });

@@ -22,18 +22,39 @@ class Governments {
    * 
    * @param {string} name 
    * @param {string} description 
+   * @param {string} contact 
+   * @param {string} address 
    */
-  static async addOne(name, description) {
+  static async addOne(name, description, contact, address, user_id) {
     return db.run(`INSERT INTO governments 
       (
         ${db.columnNames.name},
-        ${db.columnNames.description}
+        ${db.columnNames.description},
+        ${db.columnNames.contact},
+        ${db.columnNames.address}
       ) 
       VALUES 
       (
         '${name}',
-        '${description}'
+        '${description}',
+        '${contact}',
+        '${address}'
       )`)
+      .then(
+        () => {
+          return db.get(`SELECT * FROM governments WHERE
+            ${db.columnNames.name} = '${name}' AND
+            ${db.columnNames.description} = '${description}' AND
+            ${db.columnNames.contact} = '${contact}' AND
+            ${db.columnNames.address} = '${address}'
+            `)
+        }
+      )
+      .then(
+        (gov) => {
+          this.addUser(gov.government_id, user_id, true)
+        }
+      )
   }
 
   /**
@@ -41,7 +62,7 @@ class Governments {
    * @return {Governments[]}
    */
   static async findAll() {
-    return db.all(`SELECT * FROM governments`);
+    return db.all(`SELECT * FROM governments`)
   }
 
   /**
@@ -55,7 +76,6 @@ class Governments {
 
   /**
    * Return governments the user is a part of
-   * @param {number} government_id 
    * @param {number} user_id 
    * @return {Governments[]}
    */
@@ -64,16 +84,27 @@ class Governments {
   }
 
   /**
+   * Return users in a government
+   * @param {number} government_id 
+   * @return {Governments[]}
+   */
+  static async governmentUsers(government_id) {
+    return db.all(`SELECT * FROM user_governments WHERE ${db.columnNames.government_id} = '${government_id}'`);
+  }
+
+  /**
    * Add new user to government
    * @param {number} government_id 
    * @param {number} user_id 
+   * @param {boolean} is_rep 
    * @return {Governments[]}
    */
-  static async addUser(government_id, user_id) {
+  static async addUser(government_id, user_id, is_rep = false) {
     return db.run(`INSERT INTO user_governments 
-      (${db.columnNames.government_id},${db.columnNames.user_id}) 
-      VALUES ('${government_id}','${user_id}')`);
+      (${db.columnNames.government_id},${db.columnNames.user_id}, ${db.columnNames.is_rep}) 
+      VALUES ('${government_id}','${user_id}', '${is_rep}')`);
   }
+
 
   /**
    * Remove user from government
