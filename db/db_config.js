@@ -19,8 +19,7 @@ const columnNames = {
   contact: "contact",
   address: "address",
 
-  post_id: "post_id",
-  timestamp: "timestamp"
+  closing_date: "closing_date"
 
 };
 Object.freeze(columnNames);
@@ -33,6 +32,8 @@ function createDb() {
     createUserTable();
 
     createUserGovernmentsTable();
+
+    createBillsTable();
 
   });
 };
@@ -63,6 +64,15 @@ function createUserGovernmentsTable() {
     ${columnNames.is_rep} BOOLEAN,
     ${columnNames.description} TEXT,
     FOREIGN KEY (${columnNames.user_id}) REFERENCES users(${columnNames.user_id})
+    FOREIGN KEY (${columnNames.government_id}) REFERENCES governments(${columnNames.government_id})
+  )`);
+};
+
+function createBillsTable() {
+  sqlDb.run(`CREATE TABLE IF NOT EXISTS bills (
+    ${columnNames.government_id} INTEGER KEY,
+    ${columnNames.description} TEXT,
+    ${columnNames.closing_date} TEXT,
     FOREIGN KEY (${columnNames.government_id}) REFERENCES governments(${columnNames.government_id})
   )`);
 };

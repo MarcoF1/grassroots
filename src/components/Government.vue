@@ -26,15 +26,24 @@
               <button v-else class="button" v-on:click="leaveGovernment">Leave</button> 
           </tab>
           <tab title="Representatives">
+            <div v-if="isRep">
+              <p>You are a representative</p>
+            </div>
             <ul>
               <li v-for="rep in government.reps" v-bind:key="rep">
+                <div v-if="rep.user_id == user_id">
+                  <p>This is you!</p>
+                </div>
                 {{rep}}
               </li>
             </ul>
             
           </tab>
           <tab title="Bills">
-            Bills will go here!
+            <div v-if="isRep">
+              <p>You are a representative add a bill!</p>
+              <button class="button" v-on:click="joinGovernment">Add</button> 
+            </div>
           </tab>
           <tab title="Calendar">
             Calendar will go here!
@@ -92,6 +101,7 @@ export default {
       government_id: parseInt(this.$route.params.id),
       isRep: false,
       isMember: false,
+      user_id: this.$cookie.get('auth-id'),
       messages: [],
       errors: [],
     }
