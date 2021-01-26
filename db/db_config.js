@@ -19,6 +19,7 @@ const columnNames = {
   contact: "contact",
   address: "address",
 
+  bill_id: "bill_id",
   closing_date: "closing_date"
 
 };
@@ -70,6 +71,7 @@ function createUserGovernmentsTable() {
 
 function createBillsTable() {
   sqlDb.run(`CREATE TABLE IF NOT EXISTS bills (
+    ${columnNames.bill_id} INTEGER PRIMARY KEY AUTOINCREMENT,
     ${columnNames.government_id} INTEGER KEY,
     ${columnNames.description} TEXT,
     ${columnNames.closing_date} TEXT,
