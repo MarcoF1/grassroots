@@ -15,12 +15,6 @@
     <ChangeUsername/>
     <ChangePassword/>
     <h1>
-      My Governments
-    </h1>
-    <div v-for="gov in myGovernments" v-bind:key="gov">
-        {{gov}}
-    </div>
-    <h1>
       Join new Government
     </h1>
     <form id="join-government" class='component' v-on:submit.prevent="joinGovernment" method="post">
@@ -49,7 +43,6 @@
   </div>
 </template>
 <style scoped>
-
   .wrapper {
     display: flex;
     align-items: center;
@@ -90,7 +83,6 @@ export default {
       govContact: "",
       govAddress: "",
       govID: null,
-      myGovernments: [],
       messages: [],
       errors: [],
     }
@@ -141,22 +133,6 @@ export default {
         .delete(`/api/governments/leave/${this.govID}`)
         .then(() => {
           this.messages.push("Left government")
-        })
-        .catch(err => {
-          // handle error 
-          this.errors.push(err.response.data.error);
-        })
-        .then(() => {
-          // always executed
-          this.resetForm();
-          this.clearMessages();
-        });
-    },
-    getMyGovernments: function() {
-      axios
-        .get(`/api/governments/my`)
-        .then((res) => {
-          this.myGovernments = res.data.governments
         })
         .catch(err => {
           // handle error 

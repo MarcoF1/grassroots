@@ -23,7 +23,7 @@ export default new Router({
     },
     {
       path: '/governments',
-      name: 'find',
+      name: 'governments',
       component: () => import('./views/Governments.vue')
     },
     { 

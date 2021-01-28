@@ -92,6 +92,11 @@ router.get(
         for( let i = 0 ; i < myGovIDs.length ; i ++) {
             governments.push(await Governments.findByID(myGovIDs[i]))
         }
+        for(let i = 0 ; i < governments.length ; i ++){
+            let gov = governments[i]
+            gov.users = await Governments.governmentUsers(gov.government_id);
+            gov.reps = await gov.users.filter( user => user.is_rep == 'true');
+        }
         res.status(201).json({governments}).end();
     } catch (error) {
         res.status(400).json({ error: "Failed to get governments" }).end();

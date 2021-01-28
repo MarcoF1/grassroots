@@ -6,7 +6,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import Account from "../components/Account.vue";
 import Navbar from "../components/Navbar.vue";

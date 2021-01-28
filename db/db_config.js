@@ -60,7 +60,7 @@ function createUserTable() {
 
 function createUserGovernmentsTable() {
   sqlDb.run(`CREATE TABLE IF NOT EXISTS user_governments (
-    ${columnNames.user_id} INTEGER KEY UNIQUE,
+    ${columnNames.user_id} INTEGER KEY,
     ${columnNames.government_id} INTEGER KEY,
     ${columnNames.is_rep} BOOLEAN,
     ${columnNames.description} TEXT,
