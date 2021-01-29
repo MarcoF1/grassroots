@@ -58,7 +58,6 @@
     margin-bottom: 16px;
     width: 600px;
   }
-
 </style>
 
 <script>

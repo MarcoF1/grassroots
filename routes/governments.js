@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 const Governments = require('../models/Governments');
+const Users = require('../models/Users');
+
 
 /**
  * Add new government
@@ -44,9 +46,15 @@ router.get(
         let government_id = req.params.government_id;
         let government = await Governments.findByID(government_id);
         government.users = await Governments.governmentUsers(government.government_id);
+        for(let i =0 ; i < government.users.length ; i++) {
+            let user = government.users[i];
+            let full_user = await Users.findByID(user.user_id)
+            government.users[i].username = full_user.username;
+        }
         government.reps = await government.users.filter( user => user.is_rep == 'true');
         res.status(201).json({government}).end();
     } catch (error) {
+        console.log(error)
         res.status(400).json({ error: "Failed to get government" }).end();
     }
 });

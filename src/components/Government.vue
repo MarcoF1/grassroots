@@ -29,15 +29,13 @@
             <div v-if="isRep">
               <p>You are a representative</p>
             </div>
-            <ul>
-              <li v-for="rep in government.reps" v-bind:key="rep">
+            <div v-for="rep in government.reps" v-bind:key="rep" class="rep">
                 <div v-if="rep.user_id == user_id">
                   <p>This is you!</p>
                 </div>
-                {{rep}}
-              </li>
-            </ul>
-            
+                <p><strong>{{rep.username}}</strong></p>
+                <p>Description: {{rep.description}}</p>
+            </div>
           </tab>
           <tab title="Bills">
             <div v-if="isRep">
@@ -71,7 +69,13 @@
   .overview {
     width: 50%;
   }
-
+  .rep {
+    padding: 32px;
+    border-radius: 32px;
+    box-shadow: 0px 0px 12px 6px #ddd;
+    margin-bottom: 16px;
+    width: 600px;
+  }
   @media only screen and (max-width: 800px) {
     .overview {
       width: 100%;
@@ -96,8 +100,6 @@ export default {
   data() {
     return {
       government: {},
-      posts: [],
-      displayPosts: [],
       government_id: parseInt(this.$route.params.id),
       isRep: false,
       isMember: false,
