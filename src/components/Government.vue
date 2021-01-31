@@ -25,11 +25,12 @@
               <button v-if="!isMember" class="button" v-on:click="joinGovernment">Join</button> 
               <button v-else class="button" v-on:click="leaveGovernment">Leave</button> 
           </tab>
+
           <tab title="Representatives">
             <div v-if="isRep">
               <p>You are a representative</p>
             </div>
-            <div v-for="rep in government.reps" v-bind:key="rep" class="rep">
+            <div v-for="rep in government.reps" v-bind:key="rep" class="item">
                 <div v-if="rep.user_id == user_id">
                   <p>This is you!</p>
                 </div>
@@ -37,15 +38,31 @@
                 <p>Description: {{rep.description}}</p>
             </div>
           </tab>
+
           <tab title="Bills">
             <div v-if="isRep">
               <p>You are a representative add a bill!</p>
-              <button class="button" v-on:click="joinGovernment">Add</button> 
+              <form id="add-bill" class='component' v-on:submit.prevent="addBill" method="post">
+                <div class="stack">
+                  <input id='billName' v-model.trim='billName' type='text' name='billName' placeholder="Bill Name">
+                  <input id='billDescription' v-model.trim='billDescription' type='text' name='billDescription' placeholder="Bill Description">
+                  <input id='billClosingDate' v-model.trim='billClosingDate' type='text' name='billClosingDate' placeholder="Closing Date">
+                </div>
+                <input type='submit' value='Add' class="button">
+              </form>
             </div>
+            <div v-if="government.bills == 0">No Bills yet!</div>
+              <div v-for="bill in government.bills" v-bind:key="bill" class="item">
+                <p><strong>{{bill.name}}</strong></p>
+                <p>Description: {{bill.description}}</p>
+                <p>Closing Date: {{bill.closing_date}}</p>
+              </div>
           </tab>
+
           <tab title="Calendar">
             Calendar will go here!
           </tab>
+          
         </Tabs>
       </div>
     </div>
@@ -59,6 +76,11 @@
     justify-content: center;
     flex-direction: column;
   }
+  .stack {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
   .top {
     display: flex;
     justify-content: space-between;
@@ -69,7 +91,7 @@
   .overview {
     width: 50%;
   }
-  .rep {
+  .item {
     padding: 32px;
     border-radius: 32px;
     box-shadow: 0px 0px 12px 6px #ddd;
@@ -95,7 +117,7 @@ import Post from "./Post.vue";
 import axios from "axios";
 
 export default {
-  name: "District",
+  name: "Government",
 
   data() {
     return {
@@ -104,6 +126,9 @@ export default {
       isRep: false,
       isMember: false,
       user_id: this.$cookie.get('auth-id'),
+      billName: "",
+      billDescription: "",
+      billClosingDate: "",
       messages: [],
       errors: [],
     }
@@ -163,6 +188,28 @@ export default {
           this.messages.push("Left government")
           this.isMember = false;
           this.isRep = false;
+        })
+        .catch(err => {
+          // handle error 
+          this.errors.push(err.response.data.error);
+        })
+        .then(() => {
+          // always executed
+          this.resetForm();
+          this.clearMessages();
+        });
+    },
+    addBill: function() {
+      const bodyContent = { 
+        government_id: this.government_id, 
+        name: this.billName,
+        description: this.billDescription,
+        closing_date: this.billClosingDate
+      };
+      axios
+        .post(`/api/bills`, bodyContent)
+        .then(() => {
+          this.messages.push("Added bill!")
         })
         .catch(err => {
           // handle error 

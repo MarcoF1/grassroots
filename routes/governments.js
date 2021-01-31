@@ -3,6 +3,7 @@ const router = express.Router();
 
 const Governments = require('../models/Governments');
 const Users = require('../models/Users');
+const Bills = require('../models/Bills');
 
 
 /**
@@ -33,6 +34,25 @@ router.post(
 });
 
 /**
+ * Remove government
+ * 
+ * @name DELETE /api/governments/:government_id'
+ * @param {number} government_id 
+ */
+router.delete(
+    '/:government_id',
+    [],
+    async (req, res) => {
+    try {
+        let government_id = req.params.government_id;
+        await Governments.deleteOne(government_id)
+        res.status(201).json({message: "Succesfully deleted government"}).end();
+    } catch (error) {
+        res.status(400).json({ error: "Failed to delete government" }).end();
+    }
+});
+
+/**
  * Get government with id
  * 
  * @name GET /api/government/:id
@@ -52,6 +72,7 @@ router.get(
             government.users[i].username = full_user.username;
         }
         government.reps = await government.users.filter( user => user.is_rep == 'true');
+        government.bills = await Bills.findByGovernmentID(government_id)
         res.status(201).json({government}).end();
     } catch (error) {
         console.log(error)

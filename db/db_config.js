@@ -73,6 +73,7 @@ function createBillsTable() {
   sqlDb.run(`CREATE TABLE IF NOT EXISTS bills (
     ${columnNames.bill_id} INTEGER PRIMARY KEY AUTOINCREMENT,
     ${columnNames.government_id} INTEGER KEY,
+    ${columnNames.name} INTEGER KEY,
     ${columnNames.description} TEXT,
     ${columnNames.closing_date} TEXT,
     FOREIGN KEY (${columnNames.government_id}) REFERENCES governments(${columnNames.government_id})

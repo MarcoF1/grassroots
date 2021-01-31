@@ -58,6 +58,13 @@ class Governments {
   }
 
   /**
+   * Delete government
+   */
+  static async deleteOne(government_id) {
+    return db.run(`DELETE FROM governments WHERE ${db.columnNames.government_id} = '${government_id}'`)
+  }
+
+  /**
    * Return an array of all of the Governments.
    * @return {Governments[]}
    */
