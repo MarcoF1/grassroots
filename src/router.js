@@ -55,6 +55,11 @@ export default new Router({
       path: '/user/:id', 
       name: 'user',
       component: () => import('./components/User.vue') 
+    },
+    { 
+      path: '/feedback', 
+      name: 'feedback',
+      component: () => {location.href = 'https://forms.gle/4W8FqR2n7Uu1MYJE7'}
     }
   ]
 })

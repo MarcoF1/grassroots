@@ -11,6 +11,7 @@
     <h1>
       Hello {{username}}!
     </h1>
+    <a href="/feedback"><button class="button">Give Feedback</button></a>
     <SignOut/>
     <ChangeUsername/>
     <ChangePassword/>
