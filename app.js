@@ -9,7 +9,8 @@ const cors = require('cors');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const postsRouter = require('./routes/posts');
-const districtRouter = require('./routes/districts');
+const governmentsRouter = require('./routes/governments');
+const billsRouter = require('./routes/bills');
 const sessionRouter = require('./routes/session');
 
 // create our app
@@ -45,8 +46,14 @@ app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/', indexRouter);
 app.use('/api/posts', postsRouter);
 app.use('/api/users', usersRouter);
-app.use('/api/districts', districtRouter);
+app.use('/api/governments', governmentsRouter);
+app.use('/api/bills', billsRouter);
 app.use('/api/users/session', sessionRouter);
+
+
+app.get('/favicon.ico', function(req, res) { 
+  res.sendStatus(204); 
+});
 
 app.use('*', function (req, res) {
   res.redirect('/').end();

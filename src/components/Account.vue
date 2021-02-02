@@ -38,8 +38,9 @@ export default {
       this.isSignedIn = true;
     }
 
-    eventBus.$on("signin-success", (userName) => {
-      this.$cookie.set('auth', userName);
+    eventBus.$on("signin-success", (user) => {
+      this.$cookie.set('auth', user.username);
+      this.$cookie.set('auth-id', user.user_id);
       this.isSignedIn = true;
       this.messages.push("You have been signed in!");
       this.clearMessages();
@@ -58,6 +59,7 @@ export default {
     
     eventBus.$on("signout-success", () => {
       this.$cookie.set('auth', '');
+      this.$cookie.set('auth-id', '');
       this.isSignedIn = false;
       this.messages.push("You have been signed out!");
       this.clearMessages();

@@ -74,6 +74,17 @@ class Posts {
   static async findByUser(username) {
     return db.all(`SELECT * FROM posts WHERE ${db.columnNames.username} = '${username}'`);
   }  
+
+
+  /**
+   * Return an array of all of the posts by the User
+   * @param {string} username 
+   * @return {Post[]}
+   */
+  static async findByUser(user_id) {
+    return db.all(`SELECT * FROM posts WHERE ${db.columnNames.username} = '${username}'`);
+  }  
+
 }
 
 

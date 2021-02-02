@@ -1,42 +1,49 @@
 <template>
   <div class="wrapper">
+    <div v-if='messages.length' class="success-message" style="text-align:center;">
+      <div v-for='message in messages' v-bind:key='message.id'>{{ message }}</div>
+    </div>
+    <div v-if='errors.length' class="error-message" style="width: 250px;">
+      <ul>
+        <li v-for='error in errors' v-bind:key='error.id'>{{ error }}</li>
+      </ul>
+    </div>
     <h1>
       Hello {{username}}!
     </h1>
+    <a href="/feedback"><button class="button">Give Feedback</button></a>
     <SignOut/>
     <ChangeUsername/>
     <ChangePassword/>
-    <div class = "side">
-      <div class="col">
-        <h1>
-          Posts
-        </h1>
-        <div v-if="posts.length==0">
-          No posts yet!
-        </div>
-        <div v-else>
-          <Post  v-for="post in posts.slice().reverse()" :post="post" v-bind:key="post"/>
-        </div>
+    <h1>
+      Join new Government
+    </h1>
+    <form id="join-government" class='component' v-on:submit.prevent="joinGovernment" method="post">
+      <input id='govID' v-model.trim='govID' type='text' name='govID' placeholder="Government ID">
+      <input type='submit' value='Add' class="button">
+    </form>
+    <h1>
+      Leave Government
+    </h1>
+    <form id="leave-government" class='component' v-on:submit.prevent="leaveGovernment" method="post">
+      <input id='govID' v-model.trim='govID' type='text' name='govID' placeholder="Government ID">
+      <input type='submit' value='Leave' class="button">
+    </form>
+    <h1>
+      Create New Government
+    </h1>
+    <form id="add-government" class='component' v-on:submit.prevent="addGovernment" method="post">
+      <div class="wrapper">
+        <input id='govName' v-model.trim='govName' type='text' name='govName' placeholder="Name">
+        <input id='govDescription' v-model.trim='govDescription' type='text' name='govDescription' placeholder="Description">
+        <input id='govContact' v-model.trim='govContact' type='text' name='govContact' placeholder="Contact Info">
+        <input id='govAddress' v-model.trim='govAddress' type='text' name='govContact' placeholder="Address">
       </div>
-      <div class="col">
-        <h1>
-          Districts
-        </h1>
-        <div v-if="districts.length==0">
-          No districts yet!
-        </div>
-        <div v-else>
-          <div  v-for="district in districts.slice().reverse()" v-bind:key="district">
-            {{district}}
-          <div/>
-        </div>
-      </div>
-    </div>
-    </div>
+      <input type='submit' value='Add' class="button">
+    </form>
   </div>
 </template>
 <style scoped>
-
   .wrapper {
     display: flex;
     align-items: center;
@@ -71,10 +78,14 @@ export default {
 
   data() {
     return {
-      errors: [],
       username: this.$cookie.get('auth'),
-      posts: [],
-      districts: []
+      govName: "",
+      govDescription: "",
+      govContact: "",
+      govAddress: "",
+      govID: null,
+      messages: [],
+      errors: [],
     }
   },
   components: {
@@ -84,24 +95,62 @@ export default {
     Post
   },
   methods: {
-    getPosts: function() {
+    addGovernment: function() {
+      const bodyContent = { name: this.govName, description: this.govDescription, contact: this.govContact, address: this.govAddress};
       axios
-        .get(`/api/posts/username/${this.username}` )
-        .then((res) => {
-          this.posts = res.data.posts;
+        .post(`/api/governments`, bodyContent)
+        .then(() => {
+          this.messages.push("New Government added!")
         })
         .catch(err => {
           // handle error 
           this.errors.push(err.response.data.error);
         })
+        .then(() => {
+          // always executed
+          this.resetForm();
+          this.clearMessages();
+        });
+    },
+    joinGovernment: function() {
+      const bodyContent = { government_id: this.govID};
+      axios
+        .post(`/api/governments/join`, bodyContent)
+        .then(() => {
+          this.messages.push("Joined new government!!")
+        })
+        .catch(err => {
+          // handle error 
+          this.errors.push(err.response.data.error);
+        })
+        .then(() => {
+          // always executed
+          this.resetForm();
+          this.clearMessages();
+        });
+    },
+    leaveGovernment: function() {
+      axios
+        .delete(`/api/governments/leave/${this.govID}`)
+        .then(() => {
+          this.messages.push("Left government")
+        })
+        .catch(err => {
+          // handle error 
+          this.errors.push(err.response.data.error);
+        })
+        .then(() => {
+          // always executed
+          this.resetForm();
+          this.clearMessages();
+        });
     },
     resetForm: function() {
-      this.username = this.$cookie.get('auth')
     },
-
     clearMessages: function() {
       setInterval(() => {
         this.errors = [];
+        this.messages = [];
       }, 5000);
     }
   },
@@ -109,7 +158,7 @@ export default {
     eventBus.$on("change-username-success", (userName) => {
       this.username = userName;
     });
-    this.getPosts()
+    this.getMyGovernments()
   }
 }
 </script>

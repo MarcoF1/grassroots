@@ -1,17 +1,17 @@
 <template>
   <div>
-    <div class="wrap">
+      <div class="wrap">
         <input class="input" id='username' v-model.trim='username' type='text' name='username' placeholder="Username">
         <input class="input" id='password' v-model.trim='password' type='text' name='password' placeholder="Password">
       </div>
       <button class="button" v-on:click="signUp"> Sign Up</button>
       <button class="button" v-on:click="signIn"> Sign In</button>
-    <div v-if='errors.length' class="error-message" style="width: 250px;">
-      <b>Please correct the following error(s):</b>
-      <ul>
-        <li v-for='error in errors' v-bind:key='error.id'>{{ error }}</li>
-      </ul>
-    </div>
+      <div v-if='errors.length' class="error-message" style="width: 250px;">
+        <b>Please correct the following error(s):</b>
+        <ul>
+          <li v-for='error in errors' v-bind:key='error.id'>{{ error }}</li>
+        </ul>
+      </div>
   </div>
 </template>
 <style scoped>
@@ -69,7 +69,7 @@ export default {
           .post("/api/users/session", bodyContent)
           .then((res) => {
             // handle success
-            eventBus.$emit('signin-success', res.data.data.username);
+            eventBus.$emit('signin-success', res.data.user);
           })
           .catch(err => {
             // handle error

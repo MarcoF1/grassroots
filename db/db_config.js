@@ -13,11 +13,14 @@ const columnNames = {
   tags: "tags",
   deadline: "deadline",
   
-  disctict_id: "disctict_id",
+  government_id: "government_id",
+  name: "name",
+  description: "description",
+  contact: "contact",
   address: "address",
 
-  post_id: "post_id",
-  timestamp: "timestamp"
+  bill_id: "bill_id",
+  closing_date: "closing_date"
 
 };
 Object.freeze(columnNames);
@@ -26,19 +29,24 @@ function createDb() {
   console.log("created our db!");
   sqlDb = new sqlite3.Database('db.db', function() {
     
-    createDistrictTable();
+    createGovernmentsTable();
     createUserTable();
-    createPostsTable();
-    createLikesTable()
+
+    createUserGovernmentsTable();
+
+    createBillsTable();
 
   });
 };
 
 
-function createDistrictTable() {
-  sqlDb.run(`CREATE TABLE IF NOT EXISTS districts (
-    ${columnNames.disctict_id} INTEGER PRIMARY KEY,
-    ${columnNames.address} TEXT NOT NULL
+function createGovernmentsTable() {
+  sqlDb.run(`CREATE TABLE IF NOT EXISTS governments (
+    ${columnNames.government_id} INTEGER PRIMARY KEY AUTOINCREMENT,
+    ${columnNames.name} TEXT,
+    ${columnNames.description} TEXT,
+    ${columnNames.contact} TEXT,
+    ${columnNames.address} TEXT
   )`);
 };
 
@@ -50,38 +58,28 @@ function createUserTable() {
   )`);
 };
 
-
-function createPostsTable() {
-  sqlDb.run(`CREATE TABLE IF NOT EXISTS posts (
-    ${columnNames.post_id} INTEGER PRIMARY KEY AUTOINCREMENT,
-    ${columnNames.is_item} BOOLEAN,
-    ${columnNames.user_id} INTEGER NOT NULL,
-    ${columnNames.username} INTEGER NOT NULL,
-    ${columnNames.disctict_id} INTEGER,
-    ${columnNames.tags} TEXT NOT NULL,
-    ${columnNames.text} TEXT NOT NULL,
-    ${columnNames.timestamp} TIMESTAMP NOT NULL,
-    FOREIGN KEY (${columnNames.disctict_id}) REFERENCES districs(${columnNames.disctict_id})
-  )`);
-};
-
-function createLikesTable() {
-  sqlDb.run(`CREATE TABLE IF NOT EXISTS likes (
+function createUserGovernmentsTable() {
+  sqlDb.run(`CREATE TABLE IF NOT EXISTS user_governments (
     ${columnNames.user_id} INTEGER KEY,
-    ${columnNames.post_id} INTEGER KEY,
+    ${columnNames.government_id} INTEGER KEY,
+    ${columnNames.is_rep} BOOLEAN,
+    ${columnNames.description} TEXT,
     FOREIGN KEY (${columnNames.user_id}) REFERENCES users(${columnNames.user_id})
-    FOREIGN KEY (${columnNames.post_id}) REFERENCES posts(${columnNames.post_id})
+    FOREIGN KEY (${columnNames.government_id}) REFERENCES governments(${columnNames.government_id})
   )`);
 };
 
-function createDislikesTable() {
-  sqlDb.run(`CREATE TABLE IF NOT EXISTS dislikes (
-    ${columnNames.user_id} INTEGER KEY,
-    ${columnNames.post_id} INTEGER KEY,
-    FOREIGN KEY (${columnNames.user_id}) REFERENCES users(${columnNames.user_id})
-    FOREIGN KEY (${columnNames.post_id}) REFERENCES posts(${columnNames.post_id})
+function createBillsTable() {
+  sqlDb.run(`CREATE TABLE IF NOT EXISTS bills (
+    ${columnNames.bill_id} INTEGER PRIMARY KEY AUTOINCREMENT,
+    ${columnNames.government_id} INTEGER KEY,
+    ${columnNames.name} INTEGER KEY,
+    ${columnNames.description} TEXT,
+    ${columnNames.closing_date} TEXT,
+    FOREIGN KEY (${columnNames.government_id}) REFERENCES governments(${columnNames.government_id})
   )`);
 };
+
 
 // Helper wrapper functions that return promises that resolve when sql queries are complete.
 

@@ -22,14 +22,14 @@ export default new Router({
       component: () => import('./views/Account.vue')
     },
     {
-      path: '/find',
-      name: 'find',
-      component: () => import('./views/Find.vue')
+      path: '/governments',
+      name: 'governments',
+      component: () => import('./views/Governments.vue')
     },
     { 
-      path: '/district/:id', 
-      name: 'district',
-      component: () => import('./components/District.vue') 
+      path: '/government/:id', 
+      name: 'government',
+      component: () => import('./components/Government.vue') 
     },
     { 
       path: '/rep/:id', 
@@ -55,6 +55,11 @@ export default new Router({
       path: '/user/:id', 
       name: 'user',
       component: () => import('./components/User.vue') 
+    },
+    { 
+      path: '/feedback', 
+      name: 'feedback',
+      component: () => {location.href = 'https://forms.gle/4W8FqR2n7Uu1MYJE7'}
     }
   ]
 })
