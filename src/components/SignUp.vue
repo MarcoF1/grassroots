@@ -7,7 +7,7 @@
         class="input"
         id="signInUsername"
         v-model.trim="signInUsername"
-        type="password"
+        type="text"
         name="signInUsername"
         placeholder="Username"
       />
@@ -15,7 +15,7 @@
         class="input"
         id="signInPassword"
         v-model.trim="signInPassword"
-        type="text"
+        type="password"
         name="signInPassword"
         placeholder="Password"
       />
