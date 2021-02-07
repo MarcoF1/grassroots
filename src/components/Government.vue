@@ -19,11 +19,13 @@
         <Tabs :mode="mode">
           <tab title="Home">
               <h1>{{government.name}}</h1>
-              <p>Description: {{government.name}}</p>
+              <p>Description: {{government.description}}</p>
               <p>Reps: {{government.reps.length}}</p>
               <p>Members: {{government.users.length}}</p>
               <button v-if="!isMember" class="button" v-on:click="joinGovernment">Join</button> 
               <button v-else class="button" v-on:click="leaveGovernment">Leave</button> 
+              {{'  '}}
+              <button v-if="isRep" class="button" v-on:click="editGovernment">Edit</button> 
           </tab>
 
           <tab title="Representatives">
@@ -40,25 +42,8 @@
           </tab>
 
           <tab title="Bills">
-            <div v-if="isRep">
-              <p>You are a representative add a bill!</p>
-              <form id="add-bill" class='component' v-on:submit.prevent="addBill" method="post">
-                <div class="stack">
-                  <input id='billName' v-model.trim='billName' type='text' name='billName' placeholder="Bill Name">
-                  <input id='billDescription' v-model.trim='billDescription' type='text' name='billDescription' placeholder="Bill Description">
-                  <input id='billClosingDate' v-model.trim='billClosingDate' type='text' name='billClosingDate' placeholder="Closing Date">
-                </div>
-                <input type='submit' value='Add' class="button">
-              </form>
-            </div>
-            <div v-if="government.bills == 0">No Bills yet!</div>
-              <div v-for="bill in government.bills" v-bind:key="bill" class="item">
-                <p><strong>{{bill.name}}</strong></p>
-                <p>Description: {{bill.description}}</p>
-                <p>Closing Date: {{bill.closing_date}}</p>
-              </div>
+            <Bills v-bind:government="government" v-bind:isRep="isRep" v-bind:isMember="isMember"/>
           </tab>
-
           <tab title="Calendar">
             Calendar will go here!
           </tab>
@@ -91,13 +76,7 @@
   .overview {
     width: 50%;
   }
-  .item {
-    padding: 32px;
-    border-radius: 32px;
-    box-shadow: 0px 0px 12px 6px #ddd;
-    margin-bottom: 16px;
-    width: 600px;
-  }
+  
   @media only screen and (max-width: 800px) {
     .overview {
       width: 100%;
@@ -114,6 +93,7 @@ import Navbar from "../components/Navbar.vue";
 import Tabs from "../components/Tabs.vue";
 import Tab from "../components/Tab.vue";
 import Post from "./Post.vue";
+import Bills from "./Bills.vue";
 import axios from "axios";
 
 export default {
@@ -138,7 +118,8 @@ export default {
     Navbar,
     Post,
     Tabs,
-    Tab
+    Tab,
+    Bills
   },
   created: function() {
     this.getGovernment()

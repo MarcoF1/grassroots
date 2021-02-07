@@ -42,11 +42,6 @@ export default new Router({
       component: () => import('./components/Bill.vue') 
     },
     { 
-      path: '/feed', 
-      name: 'feed',
-      component: () => import('./views/Feed.vue') 
-    },
-    { 
       path: '/people', 
       name: 'people',
       component: () => import('./views/People.vue') 

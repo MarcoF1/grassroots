@@ -23,7 +23,6 @@
             </router-link>
           </div>
         </tab>
-        
         <tab title="All">
           <div v-for="government in governments" v-bind:key="government" class="government"> 
             <p><strong>Name: {{government.name}}</strong></p>
