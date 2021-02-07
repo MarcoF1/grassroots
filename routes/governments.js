@@ -9,7 +9,7 @@ const Bills = require('../models/Bills');
 /**
  * Add new government
  * 
- * @name POST /api/government/
+ * @name POST /api/governments/
  * @param {string} name 
  * @param {string} description 
  */
@@ -36,7 +36,7 @@ router.post(
 /**
  * Update government
  * 
- * @name PUT /api/government/
+ * @name PUT /api/governments/
  * @param {string} name 
  * @param {string} description 
  * @param {string} address 
@@ -52,7 +52,7 @@ router.put(
         let description = req.body.description;
         let contact = req.body.contact;
         let address = req.body.address;
-        let old_gov = req.session.old_gov;
+        let old_gov = req.body.old_gov;
         
         let updated = await Governments.updateOne(name, description, contact, address, old_gov)
         
@@ -85,7 +85,7 @@ router.delete(
 /**
  * Get government with id
  * 
- * @name GET /api/government/:id
+ * @name GET /api/governments/:id
  * @param {number} government_id 
  */
 router.get(
@@ -113,7 +113,7 @@ router.get(
 /**
  * Get all governments
  * 
- * @name GET /api/government
+ * @name GET /api/governments
  */
 router.get(
     '/',
@@ -136,7 +136,7 @@ router.get(
 /**
  * Get users governments
  * 
- * @name GET /api/government
+ * @name GET /api/governments
  * @param {number} user_id 
  */
 router.get(

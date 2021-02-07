@@ -4,7 +4,7 @@
       <p>This is you!</p>
     </div>
     <p><strong>{{rep.username}}</strong></p>
-    <p>Description: {{rep.description}}</p>
+    <!-- <p>Description: {{rep.description}}</p> -->
   </div>
 </template>
 
