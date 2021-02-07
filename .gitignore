@@ -61,6 +61,6 @@ typings/
 .next
 
 # database
-shortdb.db
+db.db
 
 dist/

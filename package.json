@@ -1,7 +1,7 @@
 {
-  "name": "url-shortener",
+  "name": "grassroots",
   "version": "0.1.0",
-  "author": "6.170 TAs",
+  "author": "Marco + Moi",
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
