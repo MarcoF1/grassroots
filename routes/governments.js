@@ -34,6 +34,36 @@ router.post(
 });
 
 /**
+ * Update government
+ * 
+ * @name PUT /api/government/
+ * @param {string} name 
+ * @param {string} description 
+ * @param {string} address 
+ * @param {string} contact 
+ * @param {Government} old_gov
+ */
+router.put(
+    '/',
+    [],
+    async (req, res) => {
+    try {
+        let name = req.body.name;
+        let description = req.body.description;
+        let contact = req.body.contact;
+        let address = req.body.address;
+        let old_gov = req.session.old_gov;
+        
+        let updated = await Governments.updateOne(name, description, contact, address, old_gov)
+        
+        res.status(201).json({message: "Succesfully updated a government!"}).end();
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({ error: "Failed to updated government" }).end();
+    }
+});
+
+/**
  * Remove government
  * 
  * @name DELETE /api/governments/:government_id'

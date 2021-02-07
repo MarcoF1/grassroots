@@ -66,7 +66,7 @@ class Governments {
    * @param {string} address 
    * @param {Government} old_gov 
    */
-  static async addOne(name, description, contact, address, old_gov) {
+  static async updateOne(name, description, contact, address, old_gov) {
     return db.run(`UPDATE governments
       SET 
         ${db.columnNames.name} = ${name},

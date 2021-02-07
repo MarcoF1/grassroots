@@ -34,7 +34,7 @@ export default new Router({
     { 
       path: '/rep/:id', 
       name: 'rep',
-      component: () => import('./components/Representative.vue') 
+      component: () => import('./components/RepresentativePage.vue') 
     },
     { 
       path: '/bill/:id', 
