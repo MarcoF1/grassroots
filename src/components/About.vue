@@ -66,13 +66,12 @@ export default {
             this.edit = true
         },
         saveGovernment: function() {
-            this.edit = false
             const bodyContent = { 
-                name: this.name ?? this.government.name, 
-                description: this.description ?? this.government.description,
-                contact: this.contact ?? this.government.contact,
-                address: this.address ?? this.government.address,
-                old_gov: this.government 
+                name: this.name, 
+                description: this.description,
+                contact: this.contact,
+                address: this.address,
+                old_gov: this.government
             };
             axios
                 .put(`/api/governments`, bodyContent)
@@ -89,6 +88,7 @@ export default {
                 })
                 .then(() => {
                     // always executed
+                    this.edit = false
                     this.clearMessages();
                 });
         },

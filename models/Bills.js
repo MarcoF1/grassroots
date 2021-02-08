@@ -43,10 +43,32 @@ class Bills {
   }
 
   /**
+   * Update a bill
+   * 
+   * @param {number} government_id 
+   * @param {string} name 
+   * @param {string} description 
+   * @param {string} closing_date 
+   */
+  static async updateOne(name, description, closing_date, old_bill) {
+    return db.run(`UPDATE bills
+      SET 
+        ${db.columnNames.name} = '${name}',
+        ${db.columnNames.description} = '${description}',
+        ${db.columnNames.closing_date} = '${closing_date}'
+      WHERE
+        ${db.columnNames.government_id} = '${old_bill.government_id}' AND
+        ${db.columnNames.name} = '${old_bill.name}' AND
+        ${db.columnNames.description} = '${old_bill.description}' AND
+        ${db.columnNames.closing_date} = '${old_bill.closing_date}' 
+    `)
+  }
+
+  /**
    * Delete bill
    */
   static async deleteOne(bill_id) {
-    return db.run(`DELETE FROM governments WHERE ${db.columnNames.bill_id} = '${bill_id}'`)
+    return db.run(`DELETE FROM bills WHERE ${db.columnNames.bill_id} = '${bill_id}'`)
   }
 
   /**

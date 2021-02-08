@@ -9,6 +9,11 @@ const router = express.Router();
  * Create new bill.
  * 
  * @name POST /api/bills
+ * @param {string} government_id 
+ * @param {string} name 
+ * @param {string} description 
+ * @param {string} closing_date 
+ * 
  */
 router.post(
     '/',
@@ -32,6 +37,34 @@ router.post(
         res.status(400).json({ error: "Failed to add bill" }).end();
     }
   });
+
+  /**
+ * Update bill
+ * 
+ * @name PUT /api/bills/
+ * @param {string} name 
+ * @param {string} description 
+ * @param {string} closing_date 
+ * @param {Bill} old_bill
+ */
+router.put(
+    '/',
+    [],
+    async (req, res) => {
+    try {
+        let name = req.body.name;
+        let description = req.body.description;
+        let closing_date = req.body.closing_date;
+        let old_bill = req.body.old_bill;
+    
+        let updated = await Bills.updateOne(name, description, closing_date,old_bill)
+        
+        res.status(201).json({message: "Succesfully updated a bill!"}).end();
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({ error: "Failed to updated bill" }).end();
+    }
+});
 
 /**
  * Remove bill

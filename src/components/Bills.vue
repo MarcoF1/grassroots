@@ -21,7 +21,7 @@
     </div>
     <div v-if="government.bills == 0">No Bills yet!</div>
     <div v-for="bill in government.bills" v-bind:key="bill">
-        <Bill v-bind:bill="bill"/>
+        <Bill v-bind:bill="bill" v-bind:isRep="isRep" v-bind:isMember="isMember"/>
     </div>
   </div>
 </template>
