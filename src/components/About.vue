@@ -9,11 +9,11 @@
         </ul>
     </div>
     <div v-if="this.edit">
-        <div class="stack form-container">
-            <input id='name' v-model.trim='name' type='text' name='name' :placeholder="`${government.name}`">
-            <input id='description' v-model.trim='description' type='text' name='description' :placeholder="`${government.description}`">
-            <input id='contact' v-model.trim='contact' type='text' name='contact' :placeholder="`${government.contact}`">
-            <input id='address' v-model.trim='address' type='text' name='address' :placeholder="`${government.address}`">
+        <div class="center form-container">
+            Name <input id='name'  v-model.trim='name' type='text' name='name' :placeholder="`${government.name}`">
+            Description <input id='description' v-model.trim='description' type='text' name='description' :placeholder="`${government.description}`">
+            Contact Informaion <input id='contact' v-model.trim='contact' type='text' name='contact' :placeholder="`${government.contact}`">
+            Address <input id='address' v-model.trim='address' type='text' name='address' :placeholder="`${government.address}`">
         </div>
     </div>
     <div v-else>
@@ -24,12 +24,11 @@
     </div>
     <p>Reps: {{government.reps.length}}</p>
     <p>Members: {{government.users.length}}</p>
-
-    
-   
     <div v-if="isRep">
         <div v-if="edit">
             <button class="button" v-on:click="saveGovernment">Save</button>
+            {{'  '}}
+            <button class="button" v-on:click="deleteGovernment">Delete</button>
             {{'  '}}
             <button class="button" v-on:click="edit = false">Cancel</button>
         </div>
@@ -40,21 +39,14 @@
         </div>
     </div>
     <div v-else>
-
         <button v-if="!isMember" class="button" v-on:click="joinGovernment">Join</button> 
         <button v-else class="button" v-on:click="leaveGovernment">Leave</button> 
-
     </div>
-
+    <h2>Resource Links</h2>
 
   </div>
 </template>
 <style scoped>
-    .stack {
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-    }
 </style>
 <script>
 import axios from "axios";
@@ -79,28 +71,36 @@ export default {
     },
     components: {
     },
-    created() {
-        this.name = this.government.name;
-        this.description = this.government.description;
-        this.contact = this.government.contact;
-        this.address = this.government.address;
-    },
     methods: {
         editGovernment: function() {
             this.edit = true
         },
         saveGovernment: function() {
+
+            if ( this.name == undefined){
+                this.name = this.government.name
+            } 
+            if ( this.description == undefined){
+                this.description = this.government.description
+            }
+            if ( this.address == undefined){
+                this.address = this.government.address
+            }
+            if ( this.government == undefined){
+                this.government = this.government.government 
+            }
+
             const bodyContent = { 
                 name: this.name, 
                 description: this.description,
                 contact: this.contact,
                 address: this.address,
-                old_gov: this.government
+                government_id: this.government.government_id
             };
             axios
                 .put(`/api/governments`, bodyContent)
-                .then(() => {
-                    this.messages.push("Succesfull Edit!")
+                .then((res) => {
+                    this.messages.push(res.data.message)
                     this.government.name = this.name
                     this.government.description = this.description
                     this.government.contact = this.contact
@@ -117,40 +117,53 @@ export default {
                 });
         },
         joinGovernment: function() {
-        const bodyContent = { government_id: this.government_id};
-        axios
-            .post(`/api/governments/join`, bodyContent)
-            .then(() => {
-            this.messages.push("Joined new government!!")
-            this.isMember = true;
-            })
-            .catch(err => {
-            // handle error 
-            this.errors.push(err.response.data.error);
-            })
-            .then(() => {
-            // always executed
-            this.resetForm();
-            this.clearMessages();
-            });
+            const bodyContent = { government_id: this.government.government_id};
+            axios
+                .post(`/api/governments/join`, bodyContent)
+                .then((res) => {
+                    this.messages.push(res.data.message)
+                    this.isMember = true;
+                })
+                .catch(err => {
+                // handle error 
+                this.errors.push(err.response.data.error);
+                })
+                .then(() => {
+                // always executed
+                this.clearMessages();
+                });
         },
         leaveGovernment: function() {
-        axios
-            .delete(`/api/governments/leave/${this.government_id}`)
-            .then(() => {
-            this.messages.push("Left government")
-            this.isMember = false;
-            this.isRep = false;
-            })
-            .catch(err => {
-            // handle error 
-            this.errors.push(err.response.data.error);
-            })
-            .then(() => {
-            // always executed
-            this.resetForm();
-            this.clearMessages();
-            });
+            axios
+                .delete(`/api/governments/leave/${this.government.government_id}`)
+                .then((res) => {
+                    this.messages.push(res.data.message)
+                    this.isMember = false;
+                    this.isRep = false;
+                })
+                .catch(err => {
+                // handle error 
+                this.errors.push(err.response.data.error);
+                })
+                .then(() => {
+                // always executed
+                this.clearMessages();
+                });
+        },
+        deleteGovernment: function() {
+            axios
+                .delete(`/api/governments/${this.government.government_id}`)
+                .then((res) => {
+                    this.messages.push(res.data.message)
+                })
+                .catch(err => {
+                // handle error 
+                this.errors.push(err.response.data.error);
+                })
+                .then(() => {
+                // always executed
+                this.clearMessages();
+                });
         },
         clearMessages: function() {
             setInterval(() => {

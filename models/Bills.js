@@ -40,6 +40,16 @@ class Bills {
         '${description}',
         '${closing_date}'
       )`)
+      .then(
+        () => {
+          return db.get(`SELECT * FROM bills WHERE
+            ${db.columnNames.government_id} = '${government_id}' AND
+            ${db.columnNames.description} = '${description}' AND
+            ${db.columnNames.name} = '${name}' AND
+            ${db.columnNames.closing_date} = '${closing_date}'
+            `)
+        }
+      )
   }
 
   /**
@@ -50,17 +60,15 @@ class Bills {
    * @param {string} description 
    * @param {string} closing_date 
    */
-  static async updateOne(name, description, closing_date, old_bill) {
+  static async updateOne(name, description, closing_date, bill_status, bill_id) {
     return db.run(`UPDATE bills
       SET 
         ${db.columnNames.name} = '${name}',
         ${db.columnNames.description} = '${description}',
-        ${db.columnNames.closing_date} = '${closing_date}'
+        ${db.columnNames.closing_date} = '${closing_date}',
+        ${db.columnNames.bill_status} = '${bill_status}'
       WHERE
-        ${db.columnNames.government_id} = '${old_bill.government_id}' AND
-        ${db.columnNames.name} = '${old_bill.name}' AND
-        ${db.columnNames.description} = '${old_bill.description}' AND
-        ${db.columnNames.closing_date} = '${old_bill.closing_date}' 
+        ${db.columnNames.bill_id} = '${bill_id}'
     `)
   }
 

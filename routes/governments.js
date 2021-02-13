@@ -52,9 +52,9 @@ router.put(
         let description = req.body.description;
         let contact = req.body.contact;
         let address = req.body.address;
-        let old_gov = req.body.old_gov;
+        let government_id = req.body.government_id;
         
-        let updated = await Governments.updateOne(name, description, contact, address, old_gov)
+        let updated = await Governments.updateOne(name, description, contact, address, government_id)
         
         res.status(201).json({message: "Succesfully updated a government!"}).end();
     } catch (error) {
@@ -151,6 +151,8 @@ router.get(
         for( let i = 0 ; i < myGovIDs.length ; i ++) {
             governments.push(await Governments.findByID(myGovIDs[i]))
         }
+        // TODO FIX
+        governments = governments.filter(gov => gov !== undefined)
         for(let i = 0 ; i < governments.length ; i ++){
             let gov = governments[i]
             gov.users = await Governments.governmentUsers(gov.government_id);

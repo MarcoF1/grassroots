@@ -66,7 +66,7 @@ class Governments {
    * @param {string} address 
    * @param {Government} old_gov 
    */
-  static async updateOne(name, description, contact, address, old_gov) {
+  static async updateOne(name, description, contact, address, government_id) {
     return db.run(`UPDATE governments
       SET 
         ${db.columnNames.name} = '${name}',
@@ -74,10 +74,7 @@ class Governments {
         ${db.columnNames.contact} = '${contact}',
         ${db.columnNames.address} = '${address}'
       WHERE
-        ${db.columnNames.name} = '${old_gov.name}' AND
-        ${db.columnNames.description} = '${old_gov.description}' AND
-        ${db.columnNames.contact} = '${old_gov.contact}' AND
-        ${db.columnNames.address} = '${old_gov.address}' 
+        ${db.columnNames.government_id} = '${government_id}'
     `)
   }
 

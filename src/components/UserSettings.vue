@@ -16,9 +16,6 @@
     <ChangeUsername/>
     <ChangePassword/>
     <h1>
-      Join new Government
-    </h1>
-    <h1>
       Create New Government
     </h1>
     <form id="add-government" class='component' v-on:submit.prevent="addGovernment" method="post">

@@ -58,7 +58,6 @@ body {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin-top: 32px;
 }
 
 .form-container input {
@@ -66,10 +65,16 @@ body {
 }
 
 .center {
-        display: flex;
-        align-items: center;
-        justify-items: center;
-        flex-direction: column;
-    }
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    flex-direction: column;
+}
+
+.center-row {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+}
 
 </style>

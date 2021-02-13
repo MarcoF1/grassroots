@@ -11,31 +11,15 @@
           <li v-for='error in errors' v-bind:key='error.id'>{{ error }}</li>
         </ul>
       </div>
-      <Tabs :mode="mode">
-        <tab title="Mine">
-          <div v-for="government in my_governments" v-bind:key="government.name" class="government"> 
-            <p><strong>Name: {{government.name}}</strong></p>
-            <p>{{government.description}}</p>
-            <p>Reps: {{government.reps.length}}</p>
-            <p>Members: {{government.users.length}}</p>
-            <router-link :to="`government/${government.government_id}`">
-              <button v-bind:class="{ selected: $route.name  == 'account'}" class="button">View</button>
-            </router-link>
-          </div>
-        </tab>
-        <tab title="All">
-          <div v-for="government in governments" v-bind:key="government" class="government"> 
-            <p><strong>Name: {{government.name}}</strong></p>
-            <p>{{government.description}}</p>
-            <p>Reps: {{government.reps.length}}</p>
-            <p>Members: {{government.users.length}}</p>
-            <router-link :to="`government/${government.government_id}`">
-              <button v-bind:class="{ selected: $route.name  == 'account'}" class="button">View</button>
-            </router-link>
-          </div>
-        </tab>
-      </Tabs>
-
+      <div v-for="government in governments" v-bind:key="government" class="government"> 
+        <p><strong>Name: {{government.name}}</strong></p>
+        <p>{{government.description}}</p>
+        <p>Reps: {{government.reps.length}}</p>
+        <p>Members: {{government.users.length}}</p>
+        <router-link :to="`government/${government.government_id}`">
+          <button v-bind:class="{ selected: $route.name  == 'account'}" class="button">View</button>
+        </router-link>
+      </div>
     </div>
     
     
@@ -90,29 +74,12 @@ export default {
         this.resetForm();
         this.clearMessages();
       });
-    axios
-      .get("/api/governments/my")
-      .then((res) => {
-        // handle success
-        this.my_governments = res.data.governments;
-        
-      })
-      .catch(err => {
-        // handle error
-        this.errors.push(err.response.data.error);
-      })
-      .then(() => {
-        // always executed
-        this.resetForm();
-        this.clearMessages();
-      });
   },
   data() {
     return {
       errors: [],
       messages: [],
-      governments: [],
-      my_governments: []
+      governments: []
     }
   },
 };

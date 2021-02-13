@@ -13,7 +13,7 @@
         <form id="add-bill" v-on:submit.prevent="addBill" method="post" class="center">
         <div class="center form-container">
             <input id='billName' v-model.trim='billName' type='text' name='billName' placeholder="Bill Name">
-            <input id='billDescription' v-model.trim='billDescription' type='text' name='billDescription' placeholder="Bill Description">
+            <input id='billDescription' v-model.trim='billDescription' type='text' name='billDescription' placeholder="Description">
             <input id='billClosingDate' v-model.trim='billClosingDate' type='text' name='billClosingDate' placeholder="Closing Date">
         </div>
         <input type='submit' value='Add' class="button">
@@ -39,6 +39,7 @@
 <script>
 import Bill from "../components/Bill.vue";
 import axios from "axios";
+import { eventBus } from "../main";
 
 export default {
     name: "Bills",
@@ -59,6 +60,15 @@ export default {
     components: {
         Bill
     },
+    created: function() {
+        eventBus.$on("delete-bill-success", (bill_id) => {
+            this.government.bills =  this.government.bills.filter( bill => bill.bill_id != bill_id)
+            this.messages.push("Bill deleted!")
+        });
+         eventBus.$on("added-bill-success", (bill) => {
+            this.government.bills.push(bill)
+        });
+    },
     methods: {
         addBill: function() {
             const bodyContent = { 
@@ -69,8 +79,9 @@ export default {
             };
             axios
                 .post(`/api/bills`, bodyContent)
-                .then(() => {
-                    this.messages.push("Added bill!")
+                .then((res) => {
+                    this.messages.push(res.data.message)
+                    eventBus.$emit('added-bill-success', res.data.bill);
                 })
                 .catch(err => {
                     // handle error 
@@ -78,9 +89,14 @@ export default {
                 })
                 .then(() => {
                     // always executed
-                    this.resetForm();
                     this.clearMessages();
                 });
+        },
+        clearMessages: function() {
+            setInterval(() => {
+                this.errors = [];
+                this.messages = [];
+            }, 5000);
         },
     }
 }

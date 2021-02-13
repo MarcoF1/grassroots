@@ -20,7 +20,8 @@ const columnNames = {
   address: "address",
 
   bill_id: "bill_id",
-  closing_date: "closing_date"
+  closing_date: "closing_date",
+  bill_status: "bill_status",
 
 };
 Object.freeze(columnNames);
@@ -76,6 +77,7 @@ function createBillsTable() {
     ${columnNames.name} INTEGER KEY,
     ${columnNames.description} TEXT,
     ${columnNames.closing_date} TEXT,
+    ${columnNames.bill_status} TEXT DEFAULT 'In Progress',
     FOREIGN KEY (${columnNames.government_id}) REFERENCES governments(${columnNames.government_id})
   )`);
 };

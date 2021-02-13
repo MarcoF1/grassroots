@@ -1,6 +1,7 @@
 const express = require('express');
 
 const Bills = require('../models/Bills');
+const { findAll } = require('../models/Governments');
 const v = require('./validators');
 
 const router = express.Router();
@@ -28,9 +29,9 @@ router.post(
         const description = req.body.description;
         const closing_date = req.body.closing_date;
         
-        let added = await Bills.addOne(government_id, name, description, closing_date);
+        let bill = await Bills.addOne(government_id, name, description, closing_date);
 
-        res.status(201).json({message: "Succesfully added bill!" }).end();
+        res.status(201).json({message: "Succesfully added bill!" , bill}).end();
         
     } catch (error) {
         console.log(error)
@@ -55,9 +56,10 @@ router.put(
         let name = req.body.name;
         let description = req.body.description;
         let closing_date = req.body.closing_date;
-        let old_bill = req.body.old_bill;
-    
-        let updated = await Bills.updateOne(name, description, closing_date,old_bill)
+        let bill_status = req.body.bill_status;
+        let bill_id = req.body.bill_id;
+
+        let updated = await Bills.updateOne(name, description, closing_date, bill_status, bill_id)
         
         res.status(201).json({message: "Succesfully updated a bill!"}).end();
     } catch (error) {
