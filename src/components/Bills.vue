@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="center" >
     <div v-if='messages.length' class="success-message" style="text-align:center;">
         <div v-for='message in messages' v-bind:key='message.id'>{{ message }}</div>
     </div>
@@ -10,8 +10,8 @@
     </div>
     <div v-if="isRep">
         <p>You are a representative add a bill!</p>
-        <form id="add-bill" class='component' v-on:submit.prevent="addBill" method="post">
-        <div class="stack">
+        <form id="add-bill" v-on:submit.prevent="addBill" method="post" class="center">
+        <div class="center form-container">
             <input id='billName' v-model.trim='billName' type='text' name='billName' placeholder="Bill Name">
             <input id='billDescription' v-model.trim='billDescription' type='text' name='billDescription' placeholder="Bill Description">
             <input id='billClosingDate' v-model.trim='billClosingDate' type='text' name='billClosingDate' placeholder="Closing Date">
@@ -19,17 +19,21 @@
         <input type='submit' value='Add' class="button">
         </form>
     </div>
-    <div v-if="government.bills == 0">No Bills yet!</div>
-    <div v-for="bill in government.bills" v-bind:key="bill">
-        <Bill v-bind:bill="bill" v-bind:isRep="isRep" v-bind:isMember="isMember"/>
+    <div class="bills">
+        <div v-if="government.bills == 0">No Bills yet!</div>
+        <div v-for="bill in government.bills" v-bind:key="bill">
+            <Bill v-bind:bill="bill" v-bind:isRep="isRep" v-bind:isMember="isMember"/>
+        </div>
     </div>
+    
   </div>
 </template>
 <style scoped>
-    .stack {
-        display: flex;
-        align-items: center;
-        flex-direction: column;
+    .form-container {
+        margin-bottom: 32px;
+    }
+    .bills {
+        margin: 32px;
     }
 </style>
 <script>

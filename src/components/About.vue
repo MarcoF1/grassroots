@@ -9,7 +9,7 @@
         </ul>
     </div>
     <div v-if="this.edit">
-        <div class="stack">
+        <div class="stack form-container">
             <input id='name' v-model.trim='name' type='text' name='name' :placeholder="`${government.name}`">
             <input id='description' v-model.trim='description' type='text' name='description' :placeholder="`${government.description}`">
             <input id='contact' v-model.trim='contact' type='text' name='contact' :placeholder="`${government.contact}`">
@@ -24,11 +24,29 @@
     </div>
     <p>Reps: {{government.reps.length}}</p>
     <p>Members: {{government.users.length}}</p>
-    <button v-if="!isMember" class="button" v-on:click="joinGovernment">Join</button> 
-    <button v-else class="button" v-on:click="leaveGovernment">Leave</button> 
-    {{'  '}}
-    <button v-if="isRep && !this.edit" class="button" v-on:click="editGovernment">Edit</button> 
-    <button v-if="isRep && this.edit" class="button" v-on:click="saveGovernment">Save</button>
+
+    
+   
+    <div v-if="isRep">
+        <div v-if="edit">
+            <button class="button" v-on:click="saveGovernment">Save</button>
+            {{'  '}}
+            <button class="button" v-on:click="edit = false">Cancel</button>
+        </div>
+        <div v-else>
+            <button class="button" v-on:click="leaveGovernment">Leave</button> 
+            {{'  '}}
+            <button class="button" v-on:click="editGovernment">Edit</button> 
+        </div>
+    </div>
+    <div v-else>
+
+        <button v-if="!isMember" class="button" v-on:click="joinGovernment">Join</button> 
+        <button v-else class="button" v-on:click="leaveGovernment">Leave</button> 
+
+    </div>
+
+
   </div>
 </template>
 <style scoped>
@@ -60,6 +78,12 @@ export default {
         }
     },
     components: {
+    },
+    created() {
+        this.name = this.government.name;
+        this.description = this.government.description;
+        this.contact = this.government.contact;
+        this.address = this.government.address;
     },
     methods: {
         editGovernment: function() {

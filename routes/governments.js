@@ -158,6 +158,7 @@ router.get(
         }
         res.status(201).json({governments}).end();
     } catch (error) {
+        console.log(error)
         res.status(400).json({ error: "Failed to get governments" }).end();
     }
 });

@@ -5,6 +5,9 @@ import router from './router'
 
 Vue.use(VueCookie);
 
+
+
+
 export const eventBus = new Vue();
 
 Vue.config.productionTip = false

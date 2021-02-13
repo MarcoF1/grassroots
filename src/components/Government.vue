@@ -26,7 +26,7 @@
             <Bills v-bind:government="government" v-bind:isRep="isRep" v-bind:isMember="isMember"/>
           </tab>
           <tab title="Calendar">
-            Calendar will go here!
+            Calendar will go here
           </tab>
         </Tabs>
       </div>
