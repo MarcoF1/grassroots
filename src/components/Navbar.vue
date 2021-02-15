@@ -9,7 +9,6 @@
       <router-link to="/account">
         <button v-bind:class="{ selected: $route.name  == 'account'}" class="button">Account</button>
       </router-link>
-
       <div v-for="gov in governments" v-bind:key="gov.government_id">
         <router-link :to="`../government/${gov.government_id}`">
           <button v-bind:class="{ selected: $route.name  == `government` && $route.params.id == gov.government_id}" class="button">{{gov.name}}</button>

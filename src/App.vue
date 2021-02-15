@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    <!-- Set name or it defaults to '/' in router.js -->
-    <router-view/>
+    <router-view :key="$route.fullPath"/>
   </div>
 </template>
 
