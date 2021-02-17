@@ -38,12 +38,11 @@
             <button class="button" v-on:click="editGovernment">Edit</button> 
         </div>
     </div>
-    <div v-else>
+    <div v-else-if="isSignedIn">
         <button v-if="!isMember" class="button" v-on:click="joinGovernment">Join</button> 
         <button v-else class="button" v-on:click="leaveGovernment">Leave</button> 
     </div>
-    <h2>Resource Links</h2>
-
+    
   </div>
 </template>
 <style scoped>
@@ -56,7 +55,8 @@ export default {
     props: {
         government: Object,
         isMember: Boolean,
-        isRep: Boolean
+        isRep: Boolean,
+        isSignedIn: Boolean
     },
     data() {
         return {
@@ -86,8 +86,8 @@ export default {
             if ( this.address == undefined){
                 this.address = this.government.address
             }
-            if ( this.government == undefined){
-                this.government = this.government.government 
+            if ( this.contact == undefined){
+                this.contact = this.government.contact 
             }
 
             const bodyContent = { 
@@ -105,6 +105,7 @@ export default {
                     this.government.description = this.description
                     this.government.contact = this.contact
                     this.government.address = this.address
+                    this.edit = false
                 })
                 .catch(err => {
                     // handle error 
@@ -112,7 +113,6 @@ export default {
                 })
                 .then(() => {
                     // always executed
-                    this.edit = false
                     this.clearMessages();
                 });
         },

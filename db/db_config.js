@@ -23,6 +23,9 @@ const columnNames = {
   closing_date: "closing_date",
   bill_status: "bill_status",
 
+  resource_id: "resource_id",
+  url: "url"
+
 };
 Object.freeze(columnNames);
 
@@ -36,6 +39,8 @@ function createDb() {
     createUserGovernmentsTable();
 
     createBillsTable();
+
+    createResourcesTable();
 
   });
 };
@@ -74,10 +79,21 @@ function createBillsTable() {
   sqlDb.run(`CREATE TABLE IF NOT EXISTS bills (
     ${columnNames.bill_id} INTEGER PRIMARY KEY AUTOINCREMENT,
     ${columnNames.government_id} INTEGER KEY,
-    ${columnNames.name} INTEGER KEY,
+    ${columnNames.name} TEXT,
     ${columnNames.description} TEXT,
     ${columnNames.closing_date} TEXT,
     ${columnNames.bill_status} TEXT DEFAULT 'In Progress',
+    FOREIGN KEY (${columnNames.government_id}) REFERENCES governments(${columnNames.government_id})
+  )`);
+};
+
+function createResourcesTable() {
+  sqlDb.run(`CREATE TABLE IF NOT EXISTS resources (
+    ${columnNames.resource_id} INTEGER PRIMARY KEY AUTOINCREMENT,
+    ${columnNames.government_id} INTEGER KEY,
+    ${columnNames.name} TEXT,
+    ${columnNames.url} TEXT,
+    ${columnNames.description} TEXT,
     FOREIGN KEY (${columnNames.government_id}) REFERENCES governments(${columnNames.government_id})
   )`);
 };

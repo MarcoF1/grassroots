@@ -16,9 +16,11 @@
       <div class="overview">
         <Tabs :mode="mode">
           <tab title="Home">
-            <About v-bind:government="government" v-bind:isRep="isRep" v-bind:isMember="isMember"/>
+            <About v-bind:government="government" v-bind:isRep="isRep" v-bind:isMember="isMember" v-bind:isSignedIn="isSignedIn"/>
           </tab>
-
+          <tab title="Resources">
+            <Resources v-bind:government="government" v-bind:isRep="isRep" v-bind:isMember="isMember"/>
+          </tab>
           <tab title="Representatives">
             <Representatives v-bind:government="government" v-bind:isRep="isRep" v-bind:isMember="isMember"/>
           </tab>
@@ -35,24 +37,9 @@
 </template>
 <style scoped>
   .wrap {
-    padding: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-  }
-  
-  .overview {
-    width: 50%;
-  }
-  
-  @media only screen and (max-width: 800px) {
-    .overview {
-      width: 100%;
-    }
-    .top {
-      width: 100%;
-    }
+    left: 300px;
+    top: 32px;
+    position: absolute;
   }
 </style>
 
@@ -63,6 +50,7 @@ import Navbar from "../components/Navbar.vue";
 import Tabs from "../components/Tabs.vue";
 import Tab from "../components/Tab.vue";
 import Bills from "./Bills.vue";
+import Resources from "./Resources.vue";
 import About from "./About.vue";
 
 import axios from "axios";
@@ -77,6 +65,7 @@ export default {
       government_id: parseInt(this.$route.params.id),
       isRep: false,
       isMember: false,
+      isSignedIn: this.$cookie.get('auth') ? true : false,
       user_id: this.$cookie.get('auth-id'),
       messages: [],
       errors: [],
@@ -89,7 +78,8 @@ export default {
     Tab,
     Bills,
     Representatives,
-    About
+    About,
+    Resources
   },
   created: function() {
     this.getGovernment()

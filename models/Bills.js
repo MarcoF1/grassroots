@@ -5,9 +5,13 @@ const db = require('../db/db_config');
  * 
  * @prop {number} bill_id 
  * @prop {number} government_id 
+ * @prop {string} name 
  * @prop {string} description 
  * @prop {string} closing_date 
+ * @prop {string} bill_status 
  */
+
+ let db_name = 'bills'
 
 /**
  * @class Bills
@@ -26,7 +30,7 @@ class Bills {
    * @param {string} closing_date 
    */
   static async addOne(government_id, name, description, closing_date) {
-    return db.run(`INSERT INTO bills 
+    return db.run(`INSERT INTO ${db_name} 
       (
         ${db.columnNames.government_id},
         ${db.columnNames.name},
@@ -42,7 +46,7 @@ class Bills {
       )`)
       .then(
         () => {
-          return db.get(`SELECT * FROM bills WHERE
+          return db.get(`SELECT * FROM ${db_name} WHERE
             ${db.columnNames.government_id} = '${government_id}' AND
             ${db.columnNames.description} = '${description}' AND
             ${db.columnNames.name} = '${name}' AND
@@ -59,9 +63,10 @@ class Bills {
    * @param {string} name 
    * @param {string} description 
    * @param {string} closing_date 
+   * @param {string} bill_status 
    */
   static async updateOne(name, description, closing_date, bill_status, bill_id) {
-    return db.run(`UPDATE bills
+    return db.run(`UPDATE ${db_name} 
       SET 
         ${db.columnNames.name} = '${name}',
         ${db.columnNames.description} = '${description}',
@@ -76,7 +81,7 @@ class Bills {
    * Delete bill
    */
   static async deleteOne(bill_id) {
-    return db.run(`DELETE FROM bills WHERE ${db.columnNames.bill_id} = '${bill_id}'`)
+    return db.run(`DELETE FROM ${db_name} WHERE ${db.columnNames.bill_id} = '${bill_id}'`)
   }
 
   /**
@@ -84,7 +89,7 @@ class Bills {
    * @return {Bills[]}
    */
   static async findAll() {
-    return db.all(`SELECT * FROM bills`);
+    return db.all(`SELECT * FROM ${db_name}`);
   }
 
   /**
@@ -93,7 +98,7 @@ class Bills {
    * @return {Bill}
    */
   static async findByID(bill_id) {
-    return db.get(`SELECT * FROM bills WHERE ${db.columnNames.bill_id} = '${bill_id}'`);
+    return db.get(`SELECT * FROM ${db_name} WHERE ${db.columnNames.bill_id} = '${bill_id}'`);
   }
 
   /**
@@ -102,7 +107,7 @@ class Bills {
    * @return {Bill}
    */
   static async findByGovernmentID(government_id) {
-    return db.all(`SELECT * FROM bills WHERE ${db.columnNames.government_id} = '${government_id}'`);
+    return db.all(`SELECT * FROM ${db_name} WHERE ${db.columnNames.government_id} = '${government_id}'`);
   }
 
 }

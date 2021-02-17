@@ -1,7 +1,6 @@
 const express = require('express');
 
 const Bills = require('../models/Bills');
-const { findAll } = require('../models/Governments');
 const v = require('./validators');
 
 const router = express.Router();
@@ -19,6 +18,10 @@ const router = express.Router();
 router.post(
     '/',
     [
+        v.ensureUserLoggedIn,
+        v.ensureValidNameInBody,
+        v.ensureValidDescriptionInBody,
+        v.ensureValidClosingDateInBody
     ],
     async (req, res) => {
     try {
@@ -46,11 +49,16 @@ router.post(
  * @param {string} name 
  * @param {string} description 
  * @param {string} closing_date 
- * @param {Bill} old_bill
+ * @param {number} bill_id
  */
 router.put(
     '/',
-    [],
+    [
+        v.ensureUserLoggedIn,
+        v.ensureValidNameInBody,
+        v.ensureValidDescriptionInBody,
+        v.ensureValidClosingDateInBody
+    ],
     async (req, res) => {
     try {
         let name = req.body.name;
@@ -86,24 +94,6 @@ router.delete(
         res.status(400).json({ error: "Failed to delete bill" }).end();
     }
 });
-
-/**
- * Get all bills
- * 
- * @name GET /api/bills
- */
-router.get(
-    '/',
-    [
-    ],
-    async (req, res) => {
-    try {
-        let bills = await Bills.findAll();
-        res.status(201).json({bills}).end();
-    } catch (error) {
-        res.status(400).json({ error: "Failed to get bill" }).end();
-    }
-  });
 
 
 /**
