@@ -12,7 +12,7 @@
         </ul>
       </div>
       <div v-for="government in governments" v-bind:key="government" class="government"> 
-        <p><strong>Name: {{government.name}}</strong></p>
+        <p><strong>{{government.name}}</strong></p>
         <p>{{government.description}}</p>
         <p>Reps: {{government.reps.length}}</p>
         <p>Members: {{government.users.length}}</p>
@@ -21,9 +21,6 @@
         </router-link>
       </div>
     </div>
-    
-    
-    
   </div>
 </template>
 <style scoped>

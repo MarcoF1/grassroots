@@ -18,7 +18,7 @@ const app = express();
 
 // set up user session
 app.use(session({
-  secret: 'Katalog',
+  secret: 'Grassroots',
   resave: true,
   saveUninitialized: true
 }));

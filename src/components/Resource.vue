@@ -67,8 +67,7 @@ export default {
       errors: [],
       name: this.resource.name,
       description: this.resource.description,
-      url: this.resource.url,
-      resource_status: this.resource.resource_status,
+      url: this.resource.url
     }
   },
   methods: {
@@ -116,6 +115,7 @@ export default {
               // always executed
               this.edit = false
               this.clearMessages();
+              this.resetForm();
           });
     },
     clearMessages: function() {
@@ -123,6 +123,11 @@ export default {
             this.errors = [];
             this.messages = [];
         }, 5000);
+    },
+    resetForm: function() {
+        this.name = ""
+        this.description = ""
+        this.url = ""
     },
   }
 }

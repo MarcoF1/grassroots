@@ -114,6 +114,7 @@ export default {
                 .then(() => {
                     // always executed
                     this.clearMessages();
+                    this.resetForm();
                 });
         },
         joinGovernment: function() {
@@ -170,6 +171,12 @@ export default {
                 this.errors = [];
                 this.messages = [];
             }, 5000);
+        },
+        resetForm: function() {
+            this.name = ""
+            this.description = ""
+            this.contact = ""
+            this.address = ""
         },
     }
 }
