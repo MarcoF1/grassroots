@@ -58,6 +58,27 @@ class Governments {
   }
 
   /**
+   * Update a government
+   * 
+   * @param {string} name 
+   * @param {string} description 
+   * @param {string} contact 
+   * @param {string} address 
+   * @param {Government} old_gov 
+   */
+  static async updateOne(name, description, contact, address, government_id) {
+    return db.run(`UPDATE governments
+      SET 
+        ${db.columnNames.name} = '${name}',
+        ${db.columnNames.description} = '${description}',
+        ${db.columnNames.contact} = '${contact}',
+        ${db.columnNames.address} = '${address}'
+      WHERE
+        ${db.columnNames.government_id} = '${government_id}'
+    `)
+  }
+
+  /**
    * Delete government
    */
   static async deleteOne(government_id) {

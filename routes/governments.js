@@ -1,21 +1,32 @@
 const express = require('express');
 const router = express.Router();
 
+const v = require('./validators');
+
 const Governments = require('../models/Governments');
 const Users = require('../models/Users');
 const Bills = require('../models/Bills');
+const Resources = require('../models/Resources');
 
 
 /**
  * Add new government
  * 
- * @name POST /api/government/
+ * @name POST /api/governments/
  * @param {string} name 
  * @param {string} description 
+ * @param {string} contact 
+ * @param {string} address 
  */
 router.post(
     '/',
-    [],
+    [
+        v.ensureUserLoggedIn,
+        v.ensureValidNameInBody,
+        v.ensureValidDescriptionInBody,
+        v.ensureValidAddressInBody,
+        v.ensureValidContactInBody
+    ],
     async (req, res) => {
     try {
         let name = req.body.name;
@@ -34,6 +45,42 @@ router.post(
 });
 
 /**
+ * Update government
+ * 
+ * @name PUT /api/governments/
+ * @param {string} name 
+ * @param {string} description 
+ * @param {string} address 
+ * @param {string} contact 
+ * @param {number} government_id
+ */
+router.put(
+    '/',
+    [
+        v.ensureUserLoggedIn,
+        v.ensureValidNameInBody,
+        v.ensureValidDescriptionInBody,
+        v.ensureValidAddressInBody,
+        v.ensureValidContactInBody
+    ],
+    async (req, res) => {
+    try {
+        let name = req.body.name;
+        let description = req.body.description;
+        let contact = req.body.contact;
+        let address = req.body.address;
+        let government_id = req.body.government_id;
+        
+        let updated = await Governments.updateOne(name, description, contact, address, government_id)
+        
+        res.status(201).json({message: "Succesfully updated a government!"}).end();
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({ error: "Failed to updated government" }).end();
+    }
+});
+
+/**
  * Remove government
  * 
  * @name DELETE /api/governments/:government_id'
@@ -41,7 +88,10 @@ router.post(
  */
 router.delete(
     '/:government_id',
-    [],
+    [
+        v.ensureUserLoggedIn,
+        v.ensureValidGovernmentInParams
+    ],
     async (req, res) => {
     try {
         let government_id = req.params.government_id;
@@ -55,12 +105,14 @@ router.delete(
 /**
  * Get government with id
  * 
- * @name GET /api/government/:id
+ * @name GET /api/governments/:government_id
  * @param {number} government_id 
  */
 router.get(
     '/id/:government_id',
-    [],
+    [
+        v.ensureValidGovernmentInParams
+    ],
     async (req, res) => {
     try {
         let government_id = req.params.government_id;
@@ -73,6 +125,7 @@ router.get(
         }
         government.reps = await government.users.filter( user => user.is_rep == 'true');
         government.bills = await Bills.findByGovernmentID(government_id)
+        government.resources = await Resources.findByGovernmentID(government_id)
         res.status(201).json({government}).end();
     } catch (error) {
         console.log(error)
@@ -83,7 +136,7 @@ router.get(
 /**
  * Get all governments
  * 
- * @name GET /api/government
+ * @name GET /api/governments
  */
 router.get(
     '/',
@@ -106,12 +159,14 @@ router.get(
 /**
  * Get users governments
  * 
- * @name GET /api/government
+ * @name GET /api/governments
  * @param {number} user_id 
  */
 router.get(
     '/my',
-    [],
+    [
+        v.ensureUserLoggedIn
+    ],
     async (req, res) => {
     try {
         let user_id = req.session.user_id;
@@ -121,6 +176,8 @@ router.get(
         for( let i = 0 ; i < myGovIDs.length ; i ++) {
             governments.push(await Governments.findByID(myGovIDs[i]))
         }
+        // TODO FIX
+        governments = governments.filter(gov => gov !== undefined)
         for(let i = 0 ; i < governments.length ; i ++){
             let gov = governments[i]
             gov.users = await Governments.governmentUsers(gov.government_id);
@@ -128,6 +185,7 @@ router.get(
         }
         res.status(201).json({governments}).end();
     } catch (error) {
+        console.log(error)
         res.status(400).json({ error: "Failed to get governments" }).end();
     }
 });
@@ -142,13 +200,16 @@ router.get(
  */
 router.post(
     '/join',
-    [],
+    [
+        v.ensureUserLoggedIn,
+        v.ensureValidGovernmentInBody
+    ],
     async (req, res) => {
     try {
         let user_id = req.session.user_id;
         let government_id = req.body.government_id;
         await Governments.addUser(government_id, user_id)
-        res.status(201).json({message: "Succesfully added user to government " + government_id}).end();
+        res.status(201).json({message: "Succesfully added user!"}).end();
     } catch (error) {
         console.log(error)
         res.status(400).json({ error: "Failed to add user" }).end();
@@ -164,13 +225,16 @@ router.post(
  */
 router.delete(
     '/leave/:government_id',
-    [],
+    [
+        v.ensureUserLoggedIn,
+        v.ensureValidGovernmentInParams
+    ],
     async (req, res) => {
     try {
         let user_id = req.session.user_id;
         let government_id = req.params.government_id;
         await Governments.removeUser(government_id, user_id)
-        res.status(201).json({message: "Succesfully removed user from government " + government_id}).end();
+        res.status(201).json({message: "Succesfully removed user!"}).end();
     } catch (error) {
         console.log(error)
         res.status(400).json({ error: "Failed to remove user" }).end();

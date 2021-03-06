@@ -34,17 +34,12 @@ export default new Router({
     { 
       path: '/rep/:id', 
       name: 'rep',
-      component: () => import('./components/Representative.vue') 
+      component: () => import('./components/RepresentativePage.vue') 
     },
     { 
       path: '/bill/:id', 
       name: 'bill',
       component: () => import('./components/Bill.vue') 
-    },
-    { 
-      path: '/feed', 
-      name: 'feed',
-      component: () => import('./views/Feed.vue') 
     },
     { 
       path: '/people', 

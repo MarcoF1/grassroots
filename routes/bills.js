@@ -9,10 +9,19 @@ const router = express.Router();
  * Create new bill.
  * 
  * @name POST /api/bills
+ * @param {string} government_id 
+ * @param {string} name 
+ * @param {string} description 
+ * @param {string} closing_date 
+ * 
  */
 router.post(
     '/',
     [
+        v.ensureUserLoggedIn,
+        v.ensureValidNameInBody,
+        v.ensureValidDescriptionInBody,
+        v.ensureValidClosingDateInBody
     ],
     async (req, res) => {
     try {
@@ -23,15 +32,49 @@ router.post(
         const description = req.body.description;
         const closing_date = req.body.closing_date;
         
-        let added = await Bills.addOne(government_id, name, description, closing_date);
+        let bill = await Bills.addOne(government_id, name, description, closing_date);
 
-        res.status(201).json({message: "Succesfully added bill!" }).end();
+        res.status(201).json({message: "Succesfully added bill!" , bill}).end();
         
     } catch (error) {
         console.log(error)
         res.status(400).json({ error: "Failed to add bill" }).end();
     }
   });
+
+  /**
+ * Update bill
+ * 
+ * @name PUT /api/bills/
+ * @param {string} name 
+ * @param {string} description 
+ * @param {string} closing_date 
+ * @param {number} bill_id
+ */
+router.put(
+    '/',
+    [
+        v.ensureUserLoggedIn,
+        v.ensureValidNameInBody,
+        v.ensureValidDescriptionInBody,
+        v.ensureValidClosingDateInBody
+    ],
+    async (req, res) => {
+    try {
+        let name = req.body.name;
+        let description = req.body.description;
+        let closing_date = req.body.closing_date;
+        let bill_status = req.body.bill_status;
+        let bill_id = req.body.bill_id;
+
+        let updated = await Bills.updateOne(name, description, closing_date, bill_status, bill_id)
+        
+        res.status(201).json({message: "Succesfully updated a bill!"}).end();
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({ error: "Failed to updated bill" }).end();
+    }
+});
 
 /**
  * Remove bill
@@ -51,24 +94,6 @@ router.delete(
         res.status(400).json({ error: "Failed to delete bill" }).end();
     }
 });
-
-/**
- * Get all bills
- * 
- * @name GET /api/bills
- */
-router.get(
-    '/',
-    [
-    ],
-    async (req, res) => {
-    try {
-        let bills = await Bills.findAll();
-        res.status(201).json({bills}).end();
-    } catch (error) {
-        res.status(400).json({ error: "Failed to get bill" }).end();
-    }
-  });
 
 
 /**

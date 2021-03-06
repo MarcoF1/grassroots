@@ -10,39 +10,26 @@
     </div>
     <div v-if="this.edit">
         <div class="form-container">
-            Name <input id='name' v-model.trim='name' type='text' name='name' :placeholder="`${bill.name}`">
-            Description <input id='description' v-model.trim='description' type='text' name='description' :placeholder="`${bill.description}`">
-            Closing Date <input id='closing_date' v-model.trim='closing_date' type='text' name='closing_date' :placeholder="`${bill.closing_date}`">
-            Status
-            <div class="center-row">
-              <input type="radio" id="one" value="In Progress" v-model="bill_status">
-              <label for="one">In Progress</label>
-              <br>
-              <input type="radio" id="two" value="Passed" v-model="bill_status">
-              <label for="two">Passed</label>
-              <input type="radio" id="three" value="Not Passed" v-model="bill_status">
-              <label for="three">Not Passed</label>
-            </div>
-            
+            Name <input id='name' v-model.trim='name' type='text' name='name' :placeholder="`${resource.name}`">
+            URL <input id='url' v-model.trim='url' type='text' name='url' :placeholder="`${resource.url}`">
+            Description <input id='description' v-model.trim='description' type='text' name='description' :placeholder="`${resource.description}`">
         </div>
     </div>
     <div v-else>
-      <p><strong>{{bill.name}}</strong></p>
-      <p>Description: {{bill.description}}</p>
-      <p>Closing Date: {{bill.closing_date}}</p>
-      <p>Status: {{bill.bill_status}}</p>
+      <a :href="`${resource.url}`" target="_blank">{{resource.name}}</a>
+      <p>{{resource.description}}</p>
     </div>
     
     <div v-if="this.isRep">
       <div v-if="this.edit">
-         <button class="button" v-on:click="saveBill">Save</button>
+         <button class="button" v-on:click="saveresource">Save</button>
          {{'  '}}
-         <button class="button" v-on:click="deleteBill">Delete</button>
+         <button class="button" v-on:click="deleteresource">Delete</button>
          {{'  '}}
          <button class="button" v-on:click="edit = false">Cancel</button>
       </div>
       <div v-else>
-        <button class="button" v-on:click="editBill">Edit</button>
+        <button class="button" v-on:click="editresource">Edit</button>
       </div>
     </div>
     
@@ -67,9 +54,9 @@ import axios from "axios";
 import { eventBus } from "../main";
 
 export default {
-  name: "Bill",
+  name: "resource",
   props: {
-      bill: Object,
+      resource: Object,
       isMember: Boolean,
       isRep: Boolean,
       edit: false,
@@ -78,22 +65,21 @@ export default {
     return {
       messages: [],
       errors: [],
-      name: this.bill.name,
-      description: this.bill.description,
-      closing_date: this.bill.closing_date,
-      bill_status: this.bill.bill_status,
+      name: this.resource.name,
+      description: this.resource.description,
+      url: this.resource.url
     }
   },
   methods: {
-    editBill: function() {
+    editresource: function() {
       this.edit = true;
     },
-    deleteBill: function() {
+    deleteresource: function() {
       axios
-          .delete(`/api/bills/${this.bill.bill_id}`)
+          .delete(`/api/resources/${this.resource.resource_id}`)
           .then((res) => {
               this.messages.push(res.data.message)
-              eventBus.$emit('delete-bill-success', this.bill.bill_id);
+              eventBus.$emit('delete-resource-success', this.resource.resource_id);
           })
           .catch(err => {
               // handle error 
@@ -104,22 +90,22 @@ export default {
               this.clearMessages();
           });
     },
-    saveBill: function() {
+    saveresource: function() {
       const bodyContent = { 
           name: this.name, 
           description: this.description,
-          closing_date: this.closing_date,
-          bill_status: this.bill_status,
-          bill_id: this.bill.bill_id
+          url: this.url,
+          resource_status: this.resource_status,
+          resource_id: this.resource.resource_id
       };
       axios
-          .put(`/api/bills`, bodyContent)
+          .put(`/api/resources`, bodyContent)
           .then((res) => {
               this.messages.push(res.data.message)
-              this.bill.name = this.name
-              this.bill.description = this.description
-              this.bill.closing_date = this.closing_date
-              this.bill.bill_status = this.bill_status
+              this.resource.name = this.name
+              this.resource.description = this.description
+              this.resource.url = this.url
+              this.resource.resource_status = this.resource_status
           })
           .catch(err => {
               // handle error 
@@ -129,6 +115,7 @@ export default {
               // always executed
               this.edit = false
               this.clearMessages();
+              this.resetForm();
           });
     },
     clearMessages: function() {
@@ -136,6 +123,11 @@ export default {
             this.errors = [];
             this.messages = [];
         }, 5000);
+    },
+    resetForm: function() {
+        this.name = ""
+        this.description = ""
+        this.url = ""
     },
   }
 }

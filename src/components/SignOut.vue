@@ -1,5 +1,5 @@
 <template>
-  <div id="sign-out" class="component">
+  <div id="sign-out">
     <button v-on:click="signOut" class="button">Sign Out</button>
   </div>
 </template>

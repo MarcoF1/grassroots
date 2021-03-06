@@ -16,20 +16,6 @@
     <ChangeUsername/>
     <ChangePassword/>
     <h1>
-      Join new Government
-    </h1>
-    <form id="join-government" class='component' v-on:submit.prevent="joinGovernment" method="post">
-      <input id='govID' v-model.trim='govID' type='text' name='govID' placeholder="Government ID">
-      <input type='submit' value='Add' class="button">
-    </form>
-    <h1>
-      Leave Government
-    </h1>
-    <form id="leave-government" class='component' v-on:submit.prevent="leaveGovernment" method="post">
-      <input id='govID' v-model.trim='govID' type='text' name='govID' placeholder="Government ID">
-      <input type='submit' value='Leave' class="button">
-    </form>
-    <h1>
       Create New Government
     </h1>
     <form id="add-government" class='component' v-on:submit.prevent="addGovernment" method="post">
@@ -101,39 +87,6 @@ export default {
         .post(`/api/governments`, bodyContent)
         .then(() => {
           this.messages.push("New Government added!")
-        })
-        .catch(err => {
-          // handle error 
-          this.errors.push(err.response.data.error);
-        })
-        .then(() => {
-          // always executed
-          this.resetForm();
-          this.clearMessages();
-        });
-    },
-    joinGovernment: function() {
-      const bodyContent = { government_id: this.govID};
-      axios
-        .post(`/api/governments/join`, bodyContent)
-        .then(() => {
-          this.messages.push("Joined new government!!")
-        })
-        .catch(err => {
-          // handle error 
-          this.errors.push(err.response.data.error);
-        })
-        .then(() => {
-          // always executed
-          this.resetForm();
-          this.clearMessages();
-        });
-    },
-    leaveGovernment: function() {
-      axios
-        .delete(`/api/governments/leave/${this.govID}`)
-        .then(() => {
-          this.messages.push("Left government")
         })
         .catch(err => {
           // handle error 
