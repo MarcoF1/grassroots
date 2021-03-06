@@ -58,6 +58,10 @@ const ensureValidURLInBody = function(req, res, next) {
     res.status(400).json({ error: "You must specify a valid url!" }).end();
     return;
   }
+  if (!req.body.url.startsWith("https://") && !req.body.url.startsWith("http://")) {
+    res.status(400).json({ error: "Missing https:// or http://" }).end();
+    return;
+  }
   next();
 };
 
@@ -82,6 +86,12 @@ const ensureValidClosingDateInBody = function(req, res, next) {
     res.status(400).json({ error: "You must specify a valid closing date!" }).end();
     return;
   }
+  // TODO
+  // const regex = /^(0?[1-9]|1[012])[\/](0?[1-9]|[12][0-9]|3[01])[\/]\d{4}$/;
+  // if (!req.body.closing_date.match(regex)) {
+  //   res.status(400).json({ error: "Date format does not match MM/DD/YYYY!" }).end();
+  //   return;
+  // }
   next();
 };
 
