@@ -1,7 +1,7 @@
 const { Pool } = require("pg");
 // const sqlite3 = require('sqlite3');
 
-production = false;
+production = true;
 
 // let sqlDb;
 // Connect to the db using a pool
