@@ -217,9 +217,9 @@ router.post(
 });
 
 /**
- * Join new government
+ * Leave a government
  * 
- * @name DELETE /api/governments/leave:government_id'
+ * @name DELETE /api/governments/leave/:government_id'
  * @param {number} government_id 
  * @param {number} user_id 
  */
@@ -240,6 +240,60 @@ router.delete(
         res.status(400).json({ error: "Failed to remove user" }).end();
     }
 });
+
+/** 
+* Get user infromation for a government
+* 
+* @name GET /api/governments/leave/:government_id'
+* @param {number} government_id 
+* @param {number} user_id 
+*/
+router.get(
+   '/profile/:government_id',
+   [
+       v.ensureUserLoggedIn,
+       v.ensureValidGovernmentInParams
+   ],
+   async (req, res) => {
+   try {
+       let user_id = req.session.user_id;
+       let government_id = req.params.government_id;
+       let user = await Governments.findUser(government_id, user_id)
+       res.status(201).json({user, message: "Got user!"}).end();
+   } catch (error) {
+       res.status(400).json({ error: "Failed to get user" }).end();
+   }
+});
+
+/** 
+* Put user infromation for a government
+* 
+* @name PUT /api/governments/leave/:government_id'
+* @param {number} government_id 
+* @param {number} user_id 
+*/
+router.put(
+    '/profile/:government_id',
+    [
+        v.ensureUserLoggedIn,
+        v.ensureValidGovernmentInParams,
+        v.ensureValidDescriptionInBody
+    ],
+    async (req, res) => {
+    try {
+        let user_id = req.session.user_id;
+        let government_id = req.params.government_id;
+        let description = req.body.description;
+        console.log(description)
+        await Governments.updateOne(government_id, user_id, description)
+        res.status(201).json({message: "Updated user!"}).end();
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({ error: "Failed to update user" }).end();
+    }
+ });
+
+
 
 
 module.exports = router;

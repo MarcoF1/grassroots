@@ -28,14 +28,7 @@
     
   </div>
 </template>
-<style scoped>
-    .form-container {
-        margin-bottom: 32px;
-    }
-    .resources {
-        margin: 32px;
-    }
-</style>
+
 <script>
 import Resource from "../components/Resource.vue";
 import axios from "axios";
@@ -107,3 +100,12 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+    .form-container {
+        margin-bottom: 32px;
+    }
+    .resources {
+        margin: 32px;
+    }
+</style>

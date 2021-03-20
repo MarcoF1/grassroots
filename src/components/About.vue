@@ -72,9 +72,6 @@ export default {
     components: {
     },
     methods: {
-        editGovernment: function() {
-            this.edit = true
-        },
         saveGovernment: function() {
 
             if ( this.name == undefined){

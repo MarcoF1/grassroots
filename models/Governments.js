@@ -133,6 +133,19 @@ class Governments {
       VALUES ('${government_id}','${user_id}', '${is_rep}')`);
   }
 
+  /**
+   * Find a user from this government
+   * @param {number} government_id 
+   * @param {number} user_id 
+   * @return {Governments[]}
+   */
+   static async findUser(government_id, user_id) {
+    return db.get(`SELECT * FROM user_governments WHERE
+            ${db.columnNames.government_id} = '${government_id}' AND
+            ${db.columnNames.user_id} = '${user_id}'
+      `)
+  }
+
 
   /**
    * Remove user from government
@@ -145,7 +158,28 @@ class Governments {
       ${db.columnNames.user_id} = '${user_id}' AND
       ${db.columnNames.government_id} = '${government_id}'`);
   }
+  /**
+     * Update a user
+     * 
+     * @param {string} user_id 
+     * @param {string} government_id 
+     * @param {string} description 
+     * 
+     */
+  static async updateOne(government_id, user_id, description) {
+    return db.run(`UPDATE user_governments
+      SET 
+        ${db.columnNames.description} = '${description}'
+      WHERE
+        ${db.columnNames.government_id} = '${government_id}' AND
+        ${db.columnNames.user_id} = '${user_id}'
+    `)
+  }
+
+
 }
+
+
 
 
 module.exports = Governments;

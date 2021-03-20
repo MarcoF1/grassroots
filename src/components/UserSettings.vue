@@ -54,7 +54,6 @@
 import SignOut from "./SignOut.vue";
 import ChangePassword from "./ChangePassword.vue";
 import ChangeUsername from "./ChangeUsername.vue";
-import Post from "./Post.vue";
 import axios from "axios";
 import { eventBus } from "../main";
 
@@ -77,8 +76,7 @@ export default {
   components: {
     SignOut,
     ChangeUsername,
-    ChangePassword,
-    Post
+    ChangePassword
   },
   methods: {
     addGovernment: function() {

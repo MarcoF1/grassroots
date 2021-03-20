@@ -32,11 +32,6 @@ export default new Router({
       component: () => import('./components/Government.vue') 
     },
     { 
-      path: '/rep/:id', 
-      name: 'rep',
-      component: () => import('./components/RepresentativePage.vue') 
-    },
-    { 
       path: '/bill/:id', 
       name: 'bill',
       component: () => import('./components/Bill.vue') 
@@ -45,11 +40,6 @@ export default new Router({
       path: '/people', 
       name: 'people',
       component: () => import('./views/People.vue') 
-    },
-    { 
-      path: '/user/:id', 
-      name: 'user',
-      component: () => import('./components/User.vue') 
     },
     { 
       path: '/feedback', 

@@ -27,8 +27,8 @@
           <tab title="Bills">
             <Bills v-bind:government="government" v-bind:isRep="isRep" v-bind:isMember="isMember"/>
           </tab>
-          <tab title="Calendar">
-            Calendar will go here
+          <tab v-if="isSignedIn" title="Profile">
+            <Profile v-bind:government="government" v-bind:isRep="isRep" v-bind:isMember="isMember"/>
           </tab>
         </Tabs>
       </div>
@@ -41,6 +41,9 @@
     top: 32px;
     position: absolute;
   }
+  .overview {
+    width: 1200px;
+  }
 </style>
 
 <script>
@@ -52,6 +55,8 @@ import Tab from "../components/Tab.vue";
 import Bills from "./Bills.vue";
 import Resources from "./Resources.vue";
 import About from "./About.vue";
+import Profile from "./Profile.vue";
+
 
 import axios from "axios";
 
@@ -79,7 +84,8 @@ export default {
     Bills,
     Representatives,
     About,
-    Resources
+    Resources,
+    Profile
   },
   created: function() {
     this.getGovernment()
